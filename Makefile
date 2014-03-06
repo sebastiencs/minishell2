@@ -5,7 +5,7 @@
 ## Login   <chapui_s@epitech.eu>
 ## 
 ## Started on  Sun Feb  9 17:43:54 2014 chapui_s
-## Last update Tue Mar  4 23:17:53 2014 chapui_s
+## Last update Wed Mar  5 18:51:28 2014 chapui_s
 ##
 
 SRC	= main.c \
@@ -30,7 +30,8 @@ SRC	= main.c \
 	  get_redi.c \
 	  redirections.c \
 	  realloc_it.c \
-	  get_next_line.c
+	  get_next_line.c \
+	  key_clean.c
 
 NAME	= mysh
 

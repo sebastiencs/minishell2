@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Wed Mar  5 16:32:52 2014 chapui_s
+** Last update Wed Mar  5 18:43:08 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -223,6 +223,7 @@ int	exec_cmd(char **env)
 
 int			main(int argc, char **argv, char **env)
 {
+  struct termios	term_attr;
   int			ret_exec;
 
   ret_exec = 0;

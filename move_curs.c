@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 15:35:54 2014 chapui_s
-** Last update Wed Feb 26 20:31:19 2014 chapui_s
+** Last update Wed Mar  5 18:58:44 2014 chapui_s
 */
 
 #include <term.h>
@@ -15,7 +15,7 @@
 
 int	get_char(t_read **list_read, char *buf, int *curs_cur, int *is_rm)
 {
-  if (buf[1] == 0 && buf[0] >= 1 && buf[0] <= 126)
+  if (buf[1] == 0 && buf[0] >= 32 && buf[0] <= 126 && buf[0] != '\t')
   {
     (*curs_cur) += 1;
     if ((*is_rm)++ == -1)

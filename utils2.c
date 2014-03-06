@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 15:01:21 2014 chapui_s
-** Last update Wed Mar  5 00:41:42 2014 chapui_s
+** Last update Wed Mar  5 18:36:30 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -44,7 +44,8 @@ int		is_good_string_redi(char *str, char *good_string)
   unsigned int	j;
 
   i = 0;
-  if (str == NULL || is_one_backlash_n(str) == 0)
+  if (str == NULL || is_one_backlash_n(str) == 0
+      || my_strcmp("\n", str) == 0)
     return (0);
   while (str[i])
     i += 1;

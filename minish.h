@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Wed Mar  5 00:39:23 2014 chapui_s
+** Last update Wed Mar  5 19:05:12 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -42,7 +42,6 @@ typedef struct	s_pipe
 }		t_pipe;
 
 # define TERM_BUF_SIZE	4096
-struct termios		term_attr;
 
 int		fd_tty;
 void		*puterror_null(char *str);
@@ -66,7 +65,7 @@ int		go_right(t_read **list_read, int *curs_cur, int *is_rm);
 char		*search_in_env(char **env, char *var);
 void		prompt(char **env);
 char		*read_cmd(char **env, int is_prompt);
-char		*list_to_str(t_read *list_read);
+char		*list_to_str(t_read *list_read, int is_clean);
 int		check_str(char *str);
 char		**seperate_wordtab(char *str, char separator);
 int		restore_term(struct termios *term_attr);
@@ -89,5 +88,6 @@ char		*get_next_line(const int fd);
 int		restore_term_after_redi(struct termios *term_attr);
 int		is_good_string_redi(char *str, char *good_string);
 char		*rm_good_string(char *str);
+void		clean_screen(char **env);
 
 #endif /* !MINISH_H_ */

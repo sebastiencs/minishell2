@@ -1,3 +1,4 @@
+
 /*
 ** redirections.c for minish2 in /home/chapui_s/travaux/minishell2
 **
@@ -5,7 +6,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Tue Mar  4 22:47:48 2014 chapui_s
-** Last update Wed Mar  5 16:21:38 2014 chapui_s
+** Last update Wed Mar  5 19:18:15 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -64,50 +65,24 @@ static int	make_two_redi_left(t_pipe *list_pipe, int i, char *buffer)
     return (puterror("error: dup2\n"));
 }
 
-/* static int	make_two_redi_left(t_pipe *list_pipe, int i, char *buffer) */
-/* { */
-/*   pid_t		pid; */
-/*   int		*pipefd; */
-
-/*   if ((list_pipe->list_fd = (int*)malloc(sizeof(int) * 2)) == NULL) */
-/*     return (puterror("error: malloc\n")); */
-/*   pipefd = list_pipe->list_fd; */
-/*   if ((pipe(pipefd)) == -1) */
-/*     return (puterror("error: pipe\n")); */
-/*   if ((pid = fork()) == 0) */
-/*   { */
-/*     close(pipefd[0]); */
-/*     write(pipefd[1], buffer, my_strlen(buffer)); */
-/*     return (0); */
-/*   } */
-/*   else if (pid > 0) */
-/*   { */
-/*     close(pipefd[1]); */
-/*     if ((dup2(pipefd[0], 0)) == -1) */
-/*       return (puterror("error: dup2\n")); */
-/*     return (0); */
-/*   } */
-/*   else if (pid == -1) */
-/*     return (puterror("error: fork\n")); */
-/*   return (0); */
-/* } */
-
-// CORIGER cat << test
-
 static int	do_redi_left(t_pipe *list_pipe, int i, char **env)
 {
+  unsigned int	j;
   char		*buffer;
   char		*tmp;
 
   if (list_pipe->cmd[i]->is_redi_left == 1)
     return (do_simple_left_redi(list_pipe, i));
+  j = 0;
   buffer = NULL;
   tmp = NULL;
   while (is_good_string_redi(buffer, list_pipe->cmd[i]->redi_left) != 1)
   {
-    my_putstr((buffer == NULL) ? ("> ") : ("\n> "));
+    my_putstr((j == 0) ? ("> ") : ("\n> "));
     tmp = read_cmd(env, 0);
-    buffer = realloc_it(buffer, tmp);
+    if ((buffer = realloc_it(buffer, tmp)) == NULL)
+      return (-1);
+    j += 1;
   }
   my_putstr("\n");
   buffer = rm_good_string(buffer);
@@ -117,7 +92,10 @@ static int	do_redi_left(t_pipe *list_pipe, int i, char **env)
 int		do_redirections(t_pipe *list_pipe, int i, char **env)
 {
   if (list_pipe->cmd[i]->is_redi_right != 0)
-    do_redi_right(list_pipe, i);
+  {
+    if ((do_redi_right(list_pipe, i)) == -1)
+      return (-1);
+  }
   else
   {
     if (list_pipe->list_out[i] != -1)
@@ -125,7 +103,10 @@ int		do_redirections(t_pipe *list_pipe, int i, char **env)
         return (puterror("error: dup2\n"));
   }
   if (list_pipe->cmd[i]->is_redi_left != 0)
-    do_redi_left(list_pipe, i, env);
+  {
+    if ((do_redi_left(list_pipe, i, env)) == -1)
+      return (-1);
+  }
   else
   {
     if (list_pipe->list_in[i] != -1)

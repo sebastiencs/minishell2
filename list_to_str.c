@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 18:09:44 2014 chapui_s
-** Last update Thu Feb 27 14:24:28 2014 chapui_s
+** Last update Wed Mar  5 19:12:17 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -56,7 +56,7 @@ static char	*clean_str(char *str)
   return (str);
 }
 
-char		*list_to_str(t_read *list_read)
+char		*list_to_str(t_read *list_read, int is_clean)
 {
   char		*str;
   t_read	*tmp;
@@ -69,12 +69,11 @@ char		*list_to_str(t_read *list_read)
   while (tmp)
   {
     str[i] = tmp->c;
-    if (str[i] == '\t')
-      str[i] = ' ';
     i += 1;
     tmp = tmp->next;
   }
   str[i] = 0;
-  str = clean_str(str);
+  if (is_clean == 1)
+    str = clean_str(str);
   return (str);
 }
