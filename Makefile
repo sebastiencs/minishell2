@@ -5,7 +5,7 @@
 ## Login   <chapui_s@epitech.eu>
 ## 
 ## Started on  Sun Feb  9 17:43:54 2014 chapui_s
-## Last update Thu Mar  6 19:19:54 2014 chapui_s
+## Last update Fri Mar  7 19:41:50 2014 chapui_s
 ##
 
 SRC	= main.c \
@@ -40,7 +40,9 @@ SRC	= main.c \
 	  my_strchr.c \
 	  builtins_complem.c \
 	  my_cd.c \
-	  my_atoi.c
+	  my_atoi.c \
+	  my_env_disp.c \
+	  prepare_exec.c
 
 NAME	= mysh
 

@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Fri Mar  7 00:31:40 2014 chapui_s
+** Last update Fri Mar  7 19:44:32 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -113,5 +113,16 @@ char		*right_egale(char *str);
 int		my_exit(char *str);
 int		my_cd(char *path, char **env);
 int		my_atoi(char *str);
+int		disp_env(char **env, t_env *options, t_cmd *cmd);
+t_pipe		*malloc_pipe_struct(t_pipe *list_pipe,
+				    int nb_cmd_pipe,
+				    char **str_pipe,
+				    char **env);
+int		get_nb_cmd_pipe(char *str);
+int		prepare_pipe(int nb_cmd_pipe,
+			     int *list_in,
+			     int *list_out,
+			     int *list_fd);
+int		exec_cmd(char **env);
 
 #endif /* !MINISH_H_ */

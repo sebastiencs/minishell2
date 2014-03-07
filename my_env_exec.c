@@ -5,80 +5,31 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Sat Dec 21 13:18:59 2013 Sebastien Chapuis
-** Last update Fri Mar  7 12:59:42 2014 chapui_s
+** Last update Fri Mar  7 19:07:15 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-int	exec_env_null(t_cmd *cmd, int j)
+int		make_new_cmd(t_cmd *cmd, char **env, t_cmd *new_cmd, int j)
 {
-  t_cmd	*new_cmd;
-  char	*str;
-  int	i;
-
-  i = 0;
-  /* if (cmd->args[j] == NULL) */
-  /*   return (0); */
-  /* if ((str = cmd_to_str(cmd, j)) == NULL) */
-  /*   return (-1); */
-  /* if ((new_cmd = str_to_cmd(str, NULL)) == NULL) */
-  /*   return (-1); */
-  /* if ((exec_it(new_cmd, NULL, NULL, str)) == -2) */
-  /*   return (-2); */
+  new_cmd->filename = cmd->args[j];
+  new_cmd->args = &(cmd->args[j]);
+  new_cmd->cmd_path = find_cmd(new_cmd->args[0], env, 0, NULL);
+  if (new_cmd->cmd_path == NULL
+      && (cmd_null(new_cmd, new_cmd->filename)) == -1)
+    return (-1);
+  new_cmd->is_redi_right = cmd->is_redi_right;
+  new_cmd->redi_right = cmd->redi_right;
+  new_cmd->is_redi_left = cmd->is_redi_left;
+  new_cmd->redi_left = cmd->redi_left;
   return (0);
 }
 
-void		putstr_fd(char *str, int fd)
-{
-  while (str && *str)
-    write(fd, str++, 1);
-}
-
-int		disp_env(char **env, t_env *options, t_cmd *cmd)
-{
-  t_pipe	*list_pipe;
-  int		fd_to_close;
-  int		pid;
-  int		status;
-  int		i;
-
-  i = 0;
-  if (env == NULL)
-    return ;
-  if ((list_pipe = (t_pipe*)malloc(sizeof(*list_pipe))) == NULL
-      || (list_pipe->cmd = (t_cmd**)malloc(sizeof(t_cmd*) * 2)) == NULL)
-    return (puterror("error : could not alloc\n"));
-  list_pipe->cmd[0] = cmd;
-  list_pipe->cmd[1] = NULL;
-
-  if ((pid = fork()) == 0)
-  {
-
-    fd_to_close = do_redirections(list_pipe, 0, env, 0);
-
-    while (env[i])
-    {
-      putstr_fd(env[i], 1);
-      if (options->zero == 0)
-	putstr_fd("\n", 1);
-      /* my_putstr(env[i]); */
-      /* if (options->zero == 0) */
-      /*   write(fd_tty, "\n", 1); */
-      i = i + 1;
-    }
-    close(fd_to_close);
-    free(list_pipe->cmd);
-    free(list_pipe);
-    exit(0);
-  }
-  else if (pid > 0)
-  {
-    wait(status);
-  }
-
-}
-int		exec_with_env(t_cmd *cmd, char **env, int j)
+int		exec_with_env(t_cmd *cmd,
+			      char **env,
+			      int j,
+			      int null)
 {
   t_cmd		*new_cmd;
   t_pipe	*list_pipe;
@@ -91,23 +42,16 @@ int		exec_with_env(t_cmd *cmd, char **env, int j)
     return (0);
   if ((new_cmd = (t_cmd*)malloc(sizeof(*new_cmd))) == NULL)
     return (puterror("error: could not alloc\not"));
-  new_cmd->filename = cmd->args[j];
-  new_cmd->args = &(cmd->args[j]);
-  new_cmd->cmd_path = find_cmd(new_cmd->args[0], env, 0, NULL);
-  if (new_cmd->cmd_path == NULL
-      && (cmd_null(new_cmd, new_cmd->filename)) == -1)
-    return (-1);
-  new_cmd->is_redi_right = cmd->is_redi_right;
-  new_cmd->redi_right = cmd->redi_right;
-  new_cmd->is_redi_left = cmd->is_redi_left;
-  new_cmd->redi_left = cmd->redi_left;
+  if ((make_new_cmd(cmd, env, new_cmd, j)) == -1)
+    return (0);
   if ((list_pipe = (t_pipe*)malloc(sizeof(*list_pipe))) == NULL
       || (list_pipe->cmd = (t_cmd**)malloc(sizeof(*cmd) * 2)) == NULL)
     return (puterror("error: could not alloc\not"));
   list_pipe->cmd[1] = NULL;
   list_pipe->cmd[0] = new_cmd;
   list_pipe->nb_cmd_to_wait = 1;
-  loop_exec_pipe(1, list_pipe, env, 0);
+  if ((loop_exec_pipe(1, list_pipe, (null == 1) ? (NULL) : (env), 0)) == - 1)
+    return (-1);
   wait_proc(1, &status, NULL, list_pipe);
   free(new_cmd);
   free(list_pipe);

@@ -5,16 +5,16 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 19:09:45 2014 chapui_s
-** Last update Thu Mar  6 19:11:35 2014 chapui_s
+** Last update Fri Mar  7 19:28:31 2014 chapui_s
 */
 
 #include <stdlib.h>
 
-char	*left_egale(char *str)
+char		*left_egale(char *str)
 {
-  int	i;
-  char	*new_str;
-  int	size_str;
+  int		i;
+  char		*new_str;
+  int		size_str;
 
   i = 0;
   size_str = 0;
@@ -31,11 +31,11 @@ char	*left_egale(char *str)
   return (new_str);
 }
 
-char	*right_egale(char *str)
+char		*right_egale(char *str)
 {
-  int	i;
-  char	*new_str;
-  int	size_str;
+  int		i;
+  char		*new_str;
+  int		size_str;
 
   i = 0;
   size_str = 0;
@@ -63,7 +63,7 @@ int		my_exit(char *str)
 
   i = 0;
   my_putstr("exit\n");
-  if (str == NULL)
+  if (str == NULL || my_strcmp(str, "0") == 0)
     return (-3);
   while (str && str[i])
   {

@@ -5,230 +5,149 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Thu Mar  6 15:30:31 2014 chapui_s
+** Last update Fri Mar  7 20:46:59 2014 chapui_s
 */
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <stdlib.h>
-#include <curses.h>
-#include <term.h>
 #include <unistd.h>
 #include "minish.h"
-/*  */
-/* int	get_nb_cmd_pipe(char *str) */
-/* { */
-/*   int	nb; */
-/*   int	i; */
 
-/*   nb = 1; */
-/*   i = 0; */
-/*   while (str && str[i]) */
-/*   { */
-/*     if (str[i] == '|') */
-/*       nb += 1; */
-/*     i += 1; */
-/*   } */
-/*   return (nb); */
-/* } */
+int		loop_exec_pipe(int nb_cmd_pipe,
+			       t_pipe *list_pipe,
+			       char **env,
+			       int is_redi)
+{
+  unsigned int	i;
+  unsigned int	j;
+  pid_t		pid;
+  int		ret_built;
 
-/* int		prepare_pipe(int nb_cmd_pipe, */
-/* 			     int *list_in, */
-/* 			     int *list_out, */
-/* 			     int *list_fd) */
-/* { */
-/*   unsigned int	i; */
-/*   unsigned int	j; */
-/*   int		fd[2]; */
+  i = 0;
+  j = 0;
+  while (i < nb_cmd_pipe)
+  {
+    if (is_builtin(list_pipe->cmd[i]->filename) == 1)
+    {
+      if ((ret_built = do_builtin(list_pipe->cmd[i], env, list_pipe,
+				  (i < nb_cmd_pipe - 1) ?
+				  (list_pipe->list_out[i]) : (fd_tty))) != 0)
+	return (ret_built);
+    }
+    else if ((pid = fork()) == 0)
+    {
+      j = 0;
+      if ((do_redirections(list_pipe, i, env, is_redi)) == -1)
+	return (-1);
+      while (j < 2 * (nb_cmd_pipe - 1))
+      	close(list_pipe->list_fd[j++]);
+      if ((execve(list_pipe->cmd[i]->cmd_path,
+		       list_pipe->cmd[i]->args, env)) == -1)
+	return (puterror("error: execve\n"));
+    }
+    else if (pid == -1)
+      return (puterror("error: fork\n"));
+    i += 1;
+  }
+  return (0);
+}
 
-/*   i = 0; */
-/*   while (i < nb_cmd_pipe) */
-/*   { */
-/*     list_out[i] = -1; */
-/*     list_in[i] = -1; */
-/*     i += 1; */
-/*   } */
-/*   i = 0; */
-/*   j = 0; */
-/*   while (i < nb_cmd_pipe - 1) */
-/*   { */
-/*     if ((pipe(fd)) == -1) */
-/*       return (puterror("error: pipe\n")); */
-/*     list_out[i] = fd[1]; */
-/*     list_in[i + 1] = fd[0]; */
-/*     list_fd[j] = fd[0]; */
-/*     list_fd[j + 1] = fd[1]; */
-/*     i += 1; */
-/*     j += 2; */
-/*   } */
-/*   return (0); */
-/* } */
+void		wait_proc(int nb_cmd_pipe,
+			  int *status,
+			  int *list_fd,
+			  t_pipe *list_pipe)
+{
+  int		i;
 
-/* int		loop_exec_pipe(int nb_cmd_pipe, */
-/* 			       t_pipe *list_pipe, */
-/* 			       char **env) */
-/* { */
-/*   unsigned int	i; */
-/*   unsigned int	j; */
-/*   pid_t		pid; */
+  i = 0;
+  while (i < 2 * (nb_cmd_pipe - 1))
+    close(list_fd[i++]);
+  i = 0;
+  while (i < list_pipe->nb_cmd_to_wait)
+  {
+    wait(&(status[i]));
+    if (WIFSIGNALED(status[i]))
+    {
+      if (WTERMSIG(status[i]) == 11)
+	puterror("Segfault !\n");
+      else if (WTERMSIG(status[i]) == 8)
+	puterror("Arithmetic error !\n");
+      else
+	puterror("Killed\n");
+    }
+    else if (WIFSTOPPED(status[i]))
+      puterror("Stopped\n");
+    i += 1;
+  }
+}
 
-/*   i = 0; */
-/*   j = 0; */
-/*   while (i < nb_cmd_pipe) */
-/*   { */
-/*     if ((pid = fork()) == 0) */
-/*     { */
-/*       j = 0; */
-/*       do_redirections(list_pipe, i, env); */
-/*       while (j < 2 * (nb_cmd_pipe - 1)) */
-/*       	close(list_pipe->list_fd[j++]); */
-/*       if ((execve(list_pipe->cmd[i]->cmd_path, */
-/* 		  list_pipe->cmd[i]->args, env)) == -1) */
-/* 	return (puterror("error: execve\n")); */
-/*     } */
-/*     else if (pid == -1) */
-/*       return (puterror("error: fork\n")); */
-/*     i += 1; */
-/*   } */
-/* } */
+static int	is_because_no_found(t_cmd **cmd, char **str_pipe)
+{
+  unsigned int	i;
 
-/* void		wait_proc(int nb_cmd_pipe, int *status, int *list_fd) */
-/* { */
-/*   unsigned int	i; */
+  i = 0;
+  while (str_pipe[i])
+  {
+    if (cmd[i]->cmd_path == NULL)
+      return (1);
+    i += 1;
+  }
+  return (0);
+}
 
-/*   i = 0; */
-/*   while (i < 2 * (nb_cmd_pipe - 1)) */
-/*     close(list_fd[i++]); */
-/*   i = 0; */
-/*   while (i < nb_cmd_pipe) */
-/*   { */
-/*     wait(&(status[i])); */
-/*     if (WIFSIGNALED(status[i])) */
-/*     { */
-/*       if (WTERMSIG(status[i]) == 11) */
-/* 	puterror("Segfault !\n"); */
-/*       else if (WTERMSIG(status[i]) == 8) */
-/* 	puterror("Arithmetic error !\n"); */
-/*       else */
-/* 	puterror("Killed\n"); */
-/*     } */
-/*     else if (WIFSTOPPED(status[i])) */
-/*       puterror("Stopped\n"); */
-/*     i += 1; */
-/*   } */
-/* } */
+static int	exec_tab(char *str,
+			 char **env,
+			 int nb_cmd_pipe,
+			 char **str_pipe)
+{
+  t_pipe	*list_pipe;
+  int		ret_exec;
 
-/* t_pipe		*malloc_pipe_struct(t_pipe *list_pipe, */
-/* 				    int nb_cmd_pipe, */
-/* 				    char **str_pipe, */
-/* 				    char **env) */
-/* { */
-/*   unsigned int	i; */
+  if ((list_pipe = (t_pipe*)malloc(sizeof(*list_pipe))) == NULL)
+    return (puterror("error: could not alloc\n"));
+  if ((str_pipe = seperate_wordtab(str, '|')) == NULL)
+    return (-1);
+  if ((list_pipe = malloc_pipe_struct(list_pipe, nb_cmd_pipe,
+				      str_pipe, env)) == NULL)
+    return (-1);
+  if ((find_all_cmd(str_pipe, list_pipe)) == 0)
+    return (1);
+  if ((prepare_pipe(nb_cmd_pipe, list_pipe->list_in,
+  		    list_pipe->list_out, list_pipe->list_fd)) == -1)
+    return (-1);
+  list_pipe->nb_cmd_to_wait = nb_cmd_pipe;
+  if ((ret_exec = loop_exec_pipe(nb_cmd_pipe, list_pipe, env, 1)) != 0)
+    return (ret_exec);
+  wait_proc(nb_cmd_pipe, list_pipe->status, list_pipe->list_fd, list_pipe);
+  free_list_str_pipe(list_pipe, str_pipe);
+  return (0);
+}
 
-/*   i = 0; */
-/*   while (str_pipe[i]) */
-/*     i += 1; */
-/*   if ((list_pipe->status = (int*)malloc(sizeof(int) * nb_cmd_pipe)) == NULL */
-/*       || (list_pipe->list_in = (int*)malloc(sizeof(int) * nb_cmd_pipe)) == NULL */
-/*       || (list_pipe->list_out */
-/* 	  = (int*)malloc(sizeof(int) * nb_cmd_pipe)) == NULL */
-/*       || (list_pipe->list_fd */
-/* 	  = (int*)malloc(sizeof(int) * ((nb_cmd_pipe - 1) * 2))) == NULL */
-/*       || (list_pipe->cmd = (t_cmd**)malloc(sizeof(t_cmd*) * (i + 1))) == NULL) */
-/*     return (puterror_null("error: could not alloc\n")); */
-/*   i = 0; */
-/*   while (str_pipe[i]) */
-/*   { */
-/*     if ((list_pipe->cmd[i] = str_to_cmd(str_pipe[i++], env)) == NULL) */
-/*       return (NULL); */
-/*     if (list_pipe->cmd[i - 1]->cmd_path == NULL */
-/* 	&& (cmd_null(list_pipe->cmd[i - 1], str_pipe[i - 1])) == -1) */
-/*       return (NULL); */
-/*   } */
-/*   list_pipe->cmd[i] = NULL; */
-/*   return (list_pipe); */
-/* } */
+int		exec_cmd(char **env)
+{
+  char		*str_cmd;
+  char		**str_tab;
+  int		i;
+  int		ret;
 
-/* void		free_list_str_pipe(t_pipe *list_pipe, char **str_pipe) */
-/* { */
-/*   unsigned int	i; */
-
-/*   i = 0; */
-/*   free(list_pipe->status); */
-/*   free(list_pipe->list_in); */
-/*   free(list_pipe->list_out); */
-/*   free(list_pipe->list_fd); */
-/*   while (list_pipe->cmd[i]) */
-/*   { */
-/*     free(list_pipe->cmd[i]->filename); */
-/*     free(list_pipe->cmd[i++]); */
-/*   } */
-/*   free(list_pipe->cmd[i]); */
-/*   free(list_pipe->cmd); */
-/*   free(list_pipe); */
-/*   i = 0; */
-/*   while (str_pipe[i]) */
-/*     free(str_pipe[i++]); */
-/*   free(str_pipe[i]); */
-/*   free(str_pipe); */
-/* } */
-
-/* void		free_str_tab(char **str_tab) */
-/* { */
-/*   unsigned int	i; */
-
-/*   i = 0; */
-/*   while (str_tab[i]) */
-/*     free(str_tab[i++]); */
-/*   free(str_tab[i]); */
-/*   free(str_tab); */
-/* } */
-
-/* int		exec_tab(char *str, */
-/* 			 char **env, */
-/* 			 int nb_cmd_pipe, */
-/* 			 char **str_pipe) */
-/* { */
-/*   t_pipe	*list_pipe; */
-
-/*   if ((list_pipe = (t_pipe*)malloc(sizeof(*list_pipe))) == NULL) */
-/*     return (puterror("error: could not alloc\n")); */
-/*   if ((str_pipe = seperate_wordtab(str, '|')) == NULL) */
-/*     return (-1); */
-/*   if ((list_pipe = malloc_pipe_struct(list_pipe, nb_cmd_pipe, */
-/* 				      str_pipe, env)) == NULL) */
-/*     return (-1); */
-/*   if ((prepare_pipe(nb_cmd_pipe, list_pipe->list_in, */
-/*   		    list_pipe->list_out, list_pipe->list_fd)) == -1) */
-/*     return (-1); */
-/*   if ((loop_exec_pipe(nb_cmd_pipe, list_pipe, env)) == -1) */
-/*     return (-1); */
-/*   wait_proc(nb_cmd_pipe, list_pipe->status, list_pipe->list_fd); */
-/*   free_list_str_pipe(list_pipe, str_pipe); */
-/* } */
-
-/* int	exec_cmd(char **env) */
-/* { */
-/*   char	*str_cmd; */
-/*   char	**str_tab; */
-/*   int	i; */
-
-/*   i = 0; */
-/*   if ((str_cmd = read_cmd(env, 1)) == NULL) */
-/*     return (-1); */
-/*   write(fd_tty, "\n", 1); */
-/*   if ((my_strlen(str_cmd)) == 0) */
-/*     return (0); */
-/*   if ((check_str(str_cmd)) == -1) */
-/*     return (0); */
-/*   if ((str_tab = seperate_wordtab(str_cmd, ';')) == NULL) */
-/*     return (-1); */
-/*   while (str_tab[i]) */
-/*   { */
-/*     exec_tab(str_tab[i], env, get_nb_cmd_pipe(str_tab[i]), NULL); */
-/*     i += 1; */
-/*   } */
-/*   free_str_tab(str_tab); */
-/*   return (0); */
-/* } */
+  i = 0;
+  if ((str_cmd = read_cmd(env, 1)) == NULL)
+    return (-1);
+  write(fd_tty, "\n", 1);
+  if ((my_strlen(str_cmd)) == 0)
+    return (0);
+  if ((check_str(str_cmd)) == -1)
+    return (0);
+  if ((str_tab = seperate_wordtab(str_cmd, ';')) == NULL)
+    return (-1);
+  while (str_tab[i])
+  {
+    ret = exec_tab(str_tab[i], env, get_nb_cmd_pipe(str_tab[i]), NULL);
+    if (ret == 1)
+      break ;
+    else if (ret != 0)
+      return (ret);
+    i += 1;
+  }
+  free_str_tab(str_tab);
+  return (0);
+}

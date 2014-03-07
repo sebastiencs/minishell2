@@ -1,5 +1,6 @@
 Norme:	loop_exec_pipe
 	exec_with_env
 	disp_env
+	exec_cmd
 
 Gerer:	env -u USER > test

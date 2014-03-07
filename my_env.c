@@ -5,13 +5,13 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 16:07:26 2014 chapui_s
-** Last update Fri Mar  7 12:58:22 2014 chapui_s
+** Last update Fri Mar  7 19:05:12 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-int	is_env(char *str, t_cmd *cmd, int i)
+int		is_env(char *str, t_cmd *cmd, int i)
 {
   if (my_strcmp(str, "env") == 0
       || my_strcmp(str, "-i") == 0
@@ -25,9 +25,9 @@ int	is_env(char *str, t_cmd *cmd, int i)
   return (0);
 }
 
-int	get_env_option(t_cmd *cmd, t_env *options_env)
+int		get_env_option(t_cmd *cmd, t_env *options_env)
 {
-  int	i;
+  int		i;
 
   i = 0;
   while (cmd && cmd->args[i] && is_env(cmd->args[i], cmd, i) == 1)
@@ -53,10 +53,10 @@ int	get_env_option(t_cmd *cmd, t_env *options_env)
   return (i);
 }
 
-char	**dup_env(char **env)
+char		**dup_env(char **env)
 {
-  char	**new_env;
-  int	i;
+  char		**new_env;
+  int		i;
 
   i = 0;
   if (env == NULL)
@@ -64,7 +64,7 @@ char	**dup_env(char **env)
   while (env[i])
     i = i + 1;
   if ((new_env = (char**)malloc(sizeof(char*) * i + 1)) == NULL)
-    return (NULL);
+    return (puterror_null("error: could not alloc\n"));
   i = 0;
   while (env[i])
   {
@@ -75,50 +75,54 @@ char	**dup_env(char **env)
   return (new_env);
 }
 
-int	exec_my_env(char **env, t_env *options, t_cmd *cmd, int j)
+int		exec_my_env(char **env, t_env *options, t_cmd *cmd, int j)
 {
-  int	i;
+  int		i;
+  int		to_ret;
 
   i = 0;
   while (cmd && cmd->args[i] && i < j)
   {
-    if (my_strcmp(cmd->args[i], "-i") == 0)
-      return (exec_env_null(cmd, j));
-    else if (my_strchr(cmd->args[i], '=') != NULL)
+    if (my_strchr(cmd->args[i], '=') != NULL)
       prepare_setenv(&env, cmd->args[i]);
     else if (my_strcmp(cmd->args[i], "-u") == 0)
       my_unsetenv(&env, cmd->args[i + 1]);
     i = i + 1;
   }
   if (cmd->args[j] == NULL)
-    disp_env(env, options, cmd);
+    to_ret = disp_env((options->i == 1) ? (NULL) : (env), options, cmd);
   else if (options->zero == 0)
-    exec_with_env(cmd, env, j);
+    to_ret = exec_with_env(cmd, env, j, options->i);
   else
-    puterror("env: Cannot indicate NULL with a command\nPlease read --help\n");
+  {
+    puterror("env: Cannot indicate NULL with a command\n");
+    puterror("\tPlease read --help\n");
+    to_ret = 0;
+  }
   free(env);
-  return (0);
+  return (to_ret);
 }
 
-int	my_env(char **env, t_cmd *cmd, int fd_out)
+int		my_env(char **env, t_cmd *cmd, int fd_out)
 {
-  t_env	options_env;
-  char	**new_env;
-  int	fd_tty_save;
-  int	ret_exec_env;
-  int	j;
+  t_env		options_env;
+  char		**new_env;
+  int		fd_tty_save;
+  int		ret_exec_env;
+  int		j;
 
+  new_env = NULL;
   fd_tty_save = fd_tty;
   fd_tty = fd_out;
   if (cmd == NULL)
     return (0);
-  if ((new_env = dup_env(env)) == NULL)
-    return (-1);
   options_env.i = 0;
   options_env.u = 0;
   options_env.zero = 0;
   if ((j = get_env_option(cmd, &options_env)) == 0)
     return (0);
+  if ((new_env = dup_env(env)) == NULL)
+    return (-1);
   ret_exec_env = exec_my_env(new_env, &options_env, cmd, j);
   fd_tty = fd_tty_save;
   return (ret_exec_env);
