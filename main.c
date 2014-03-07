@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Fri Mar  7 20:51:58 2014 chapui_s
+** Last update Fri Mar  7 21:40:09 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -52,22 +52,37 @@ void		free_str_tab(char **str_tab)
   free(str_tab);
 }
 
+static char	**begin_env(char **env)
+{
+  if (access("/usr/bin", X_OK) != -1)
+    if (my_setenv(&env, "PATH", "/usr/bin") == -1)
+      return (NULL);
+  return (env);
+}
+
+static char	**init_sh(char **env, struct termios *term_attr)
+{
+  if (search_in_env(env, "TERM=") != NULL)
+  {
+    if ((fd_tty = open("/dev/tty", O_RDWR)) == -1)
+      puterror("error: could not open /dev/tty\n");
+    if (init_term(env, term_attr) == -1 || fd_tty == -1)
+      fd_tty = 1;
+  }
+  else
+    fd_tty = 1;
+  if (env == NULL || env[0] == NULL)
+    env = begin_env(env);
+  return (env);
+}
+
 int			main(int argc, char **argv, char **env)
 {
   struct termios	term_attr;
   int			ret_exec;
 
   ret_exec = 0;
-  term_attr.c_lflag = 1;
-  if (search_in_env(env, "TERM") != NULL)
-  {
-    if ((fd_tty = open("/dev/tty", O_RDWR)) == -1)
-      return (puterror("error: could not open /dev/tty\n"));
-    if (init_term(env, &term_attr) == -1)
-      return (-1);
-  }
-  else
-    fd_tty = 1;
+  env = init_sh(env, &term_attr);
   while (ret_exec == 0)
   {
     if ((ret_exec = exec_cmd(env)) != 0)

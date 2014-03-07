@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 18:09:44 2014 chapui_s
-** Last update Wed Mar  5 19:12:17 2014 chapui_s
+** Last update Fri Mar  7 21:03:45 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -32,7 +32,7 @@ static char	*clean_str_begin_end(char *str)
   return (str);
 }
 
-static char	*clean_str(char *str)
+char		*clean_str(char *str)
 {
   unsigned int	i;
   unsigned int	j;

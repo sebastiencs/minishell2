@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Feb  6 12:50:26 2014 chapui_s
-** Last update Tue Mar  4 23:31:59 2014 chapui_s
+** Last update Fri Mar  7 21:35:51 2014 chapui_s
 */
 
 #include <curses.h>
@@ -41,7 +41,7 @@ int	init_term(char **env,
 
 int	restore_term_after_redi(struct termios *term_attr)
 {
-  if (term_attr->c_lflag != 1)
+  if (fd_tty != 1)
   {
     term_attr->c_lflag &= ~ICANON;
     term_attr->c_lflag &= ~ECHO;
@@ -53,7 +53,7 @@ int	restore_term_after_redi(struct termios *term_attr)
 
 int	restore_term(struct termios *term_attr)
 {
-  if (term_attr->c_lflag != 1)
+  if (fd_tty != 1)
   {
     term_attr->c_lflag |= ICANON;
     term_attr->c_lflag |= ECHO;

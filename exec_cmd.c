@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Fri Mar  7 20:46:59 2014 chapui_s
+** Last update Fri Mar  7 21:02:19 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -130,9 +130,9 @@ int		exec_cmd(char **env)
   int		ret;
 
   i = 0;
-  if ((str_cmd = read_cmd(env, 1)) == NULL)
+  if ((str_cmd = chose_read(env, 1)) == NULL)
     return (-1);
-  write(fd_tty, "\n", 1);
+  /* write(fd_tty, "\n", 1); */
   if ((my_strlen(str_cmd)) == 0)
     return (0);
   if ((check_str(str_cmd)) == -1)

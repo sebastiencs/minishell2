@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Fri Mar  7 19:44:32 2014 chapui_s
+** Last update Fri Mar  7 21:04:38 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -124,5 +124,7 @@ int		prepare_pipe(int nb_cmd_pipe,
 			     int *list_out,
 			     int *list_fd);
 int		exec_cmd(char **env);
+char		*chose_read(char **env, int is_prompt);
+char		*clean_str(char *str);
 
 #endif /* !MINISH_H_ */

@@ -6,7 +6,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Tue Mar  4 22:47:48 2014 chapui_s
-** Last update Fri Mar  7 16:21:25 2014 chapui_s
+** Last update Fri Mar  7 21:25:27 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -79,13 +79,12 @@ static int	do_redi_left(t_pipe *list_pipe, int i, char **env)
   tmp = NULL;
   while (is_good_string_redi(buffer, list_pipe->cmd[i]->redi_left) != 1)
   {
-    my_putstr((j == 0) ? ("> ") : ("\n> "));
-    tmp = read_cmd(env, 0);
+    my_putstr("> ");
+    tmp = chose_read(env, 0);
     if ((buffer = realloc_it(buffer, tmp)) == NULL)
       return (-1);
     j += 1;
   }
-  my_putstr("\n");
   buffer = rm_good_string(buffer);
   return (make_two_redi_left(list_pipe, i, buffer));
 }
@@ -95,14 +94,6 @@ int		do_redirections(t_pipe *list_pipe,
 				char **env,
 				int is_redi)
 {
-  if (list_pipe->cmd[i]->is_redi_right != 0)
-    do_redi_right(list_pipe, i);
-  else if (is_redi == 1)
-  {
-    if (list_pipe->list_out[i] != -1)
-      if ((dup2(list_pipe->list_out[i], 1)) == -1)
-        return (puterror("error: dup2\n"));
-  }
   if (list_pipe->cmd[i]->is_redi_left != 0)
     do_redi_left(list_pipe, i, env);
   else if (is_redi == 1)
@@ -110,6 +101,14 @@ int		do_redirections(t_pipe *list_pipe,
     if (list_pipe->list_in[i] != -1)
       if ((dup2(list_pipe->list_in[i], 0)) == -1)
 	return (puterror("error: dup2\n"));
+  }
+  if (list_pipe->cmd[i]->is_redi_right != 0)
+    do_redi_right(list_pipe, i);
+  else if (is_redi == 1)
+  {
+    if (list_pipe->list_out[i] != -1)
+      if ((dup2(list_pipe->list_out[i], 1)) == -1)
+        return (puterror("error: dup2\n"));
   }
   return (0);
 }

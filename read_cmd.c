@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:52:40 2014 chapui_s
-** Last update Fri Mar  7 20:53:39 2014 chapui_s
+** Last update Fri Mar  7 21:29:11 2014 chapui_s
 */
 
 #include <term.h>
@@ -40,32 +40,6 @@ static int	get_key(t_read **list_read,
   return (0);
 }
 
-void	my_putchar(char c)
-{
-  write(fd_tty, &c, 1);
-}
-
-void	my_putnbr(int nb)
-{
-  if (nb < 0)
-  {
-    my_putchar('-');
-    nb = -nb;
-  }
-  if (nb >= 10)
-    my_putnbr(nb / 10);
-  my_putchar((nb % 10) + '0');
-}
-
-void	disp_key(char *buf)
-{
-  int	i;
-
-  i = 0;
-  while (buf[i])
-    my_putnbr(buf[i++]);
-}
-
 char		*read_cmd(char **env, int is_prompt)
 {
   t_read	*list_read;
@@ -95,14 +69,23 @@ char		*read_cmd(char **env, int is_prompt)
 
 char		*chose_read(char **env, int is_prompt)
 {
+  char		*str;
+
   if (fd_tty == 1)
   {
     if (is_prompt == 1)
       prompt(env);
-    return (get_next_line(0));
+    str = get_next_line(0);
+    if (str != NULL && is_prompt == 1)
+      str = clean_str(str);
+    else if (is_prompt == 1)
+      my_putstr("\n");
+    return (str);
   }
   else
   {
-    return (read_cmd(env, is_prompt));
+    if ((str = read_cmd(env, is_prompt)) != NULL)
+      my_putstr("\n");
+    return (str);
   }
 }
