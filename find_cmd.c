@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 14:57:11 2014 chapui_s
-** Last update Mon Mar  3 14:57:29 2014 chapui_s
+** Last update Thu Mar  6 15:52:21 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -13,18 +13,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "minish.h"
-
-int	cmd_null(t_cmd *cmd, char *str)
-{
-  if (str && str[0] != '\0' && is_only_spaces(str) == 0)
-  {
-    puterror("Cannot find the command '");
-    if (cmd && cmd->args)
-      puterror(cmd->args[0]);
-    puterror("'...\n");
-  }
-  return (-1);
-}
 
 static char	**path_to_wordtab(char *str)
 {
@@ -73,30 +61,38 @@ static char	*is_path_good(char *str)
   return (NULL);
 }
 
+char		*find_it(char *str, char **environ, int i, char *tmp)
+{
+  char		**paths;
+
+  while (environ[i] && my_strncmp("PATH=", environ[i], 5) != 0)
+    i = i + 1;
+  if (environ[i] == NULL)
+    return (NULL);
+  if ((paths = path_to_wordtab(my_strdup(environ[i]))) == NULL)
+    return (NULL);
+  i = 0;
+  while (paths[i])
+  {
+    tmp = paths[i];
+    if ((paths[i] = str_cat(paths[i], str)) == NULL)
+      return (NULL);
+    free(tmp);
+    if (access(paths[i], X_OK) == 0)
+      return (free_paths(paths, i));
+    i += 1;
+  }
+  return (NULL);
+}
+
 char		*find_cmd(char *str, char **environ, int i, char *tmp)
 {
   char		**paths;
 
-  if (str && str[0] != '.' && str[0] != '/' && environ)
-  {
-    while (environ[i] && my_strncmp("PATH=", environ[i], 5) != 0)
-      i = i + 1;
-    if (environ[i] == NULL)
-      return (NULL);
-    if ((paths = path_to_wordtab(my_strdup(environ[i]))) == NULL)
-      return (NULL);
-    i = 0;
-    while (paths[i])
-    {
-      tmp = paths[i];
-      if ((paths[i] = str_cat(paths[i], str)) == NULL)
-	return (NULL);
-      free(tmp);
-      if (access(paths[i], X_OK) == 0)
-	return (free_paths(paths, i));
-      i = i + 1;
-    }
-  }
+  if (is_builtin(str) == 1)
+    return (make_path_builtin(str));
+  else if (str && str[0] != '.' && str[0] != '/' && environ)
+    return (find_it(str, environ, i, tmp));
   else
     return (is_path_good(str));
 }

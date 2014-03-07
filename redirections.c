@@ -6,7 +6,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Tue Mar  4 22:47:48 2014 chapui_s
-** Last update Wed Mar  5 19:18:15 2014 chapui_s
+** Last update Fri Mar  7 16:21:25 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -27,7 +27,7 @@ static int	do_redi_right(t_pipe *list_pipe, int i)
     return (puterror("error: open\n"));
   if ((dup2(fd, 1)) == -1)
     return (puterror("error: dup2\n"));
-  return (0);
+  return (fd);
 }
 
 static int	do_simple_left_redi(t_pipe *list_pipe, int i)
@@ -46,7 +46,7 @@ static int	do_simple_left_redi(t_pipe *list_pipe, int i)
   }
   if ((dup2(fd, 0)) == -1)
     return (puterror("error: dup2\n"));
-  return (0);
+  return (fd);
 }
 
 static int	make_two_redi_left(t_pipe *list_pipe, int i, char *buffer)
@@ -63,6 +63,7 @@ static int	make_two_redi_left(t_pipe *list_pipe, int i, char *buffer)
   close(pipefd[1]);
   if ((dup2(pipefd[0], 0)) == -1)
     return (puterror("error: dup2\n"));
+  return (pipefd[0]);
 }
 
 static int	do_redi_left(t_pipe *list_pipe, int i, char **env)
@@ -89,25 +90,22 @@ static int	do_redi_left(t_pipe *list_pipe, int i, char **env)
   return (make_two_redi_left(list_pipe, i, buffer));
 }
 
-int		do_redirections(t_pipe *list_pipe, int i, char **env)
+int		do_redirections(t_pipe *list_pipe,
+				int i,
+				char **env,
+				int is_redi)
 {
   if (list_pipe->cmd[i]->is_redi_right != 0)
-  {
-    if ((do_redi_right(list_pipe, i)) == -1)
-      return (-1);
-  }
-  else
+    do_redi_right(list_pipe, i);
+  else if (is_redi == 1)
   {
     if (list_pipe->list_out[i] != -1)
       if ((dup2(list_pipe->list_out[i], 1)) == -1)
         return (puterror("error: dup2\n"));
   }
   if (list_pipe->cmd[i]->is_redi_left != 0)
-  {
-    if ((do_redi_left(list_pipe, i, env)) == -1)
-      return (-1);
-  }
-  else
+    do_redi_left(list_pipe, i, env);
+  else if (is_redi == 1)
   {
     if (list_pipe->list_in[i] != -1)
       if ((dup2(list_pipe->list_in[i], 0)) == -1)

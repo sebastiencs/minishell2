@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:23:41 2014 chapui_s
-** Last update Wed Feb 26 17:46:47 2014 chapui_s
+** Last update Thu Mar  6 19:55:15 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -27,6 +27,8 @@ char	*search_in_env(char **env, char *var)
     return (NULL);
   while (env && env[i] && my_strncmp(var, env[i], size_var) != 0)
     i += 1;
+  if (env[i] == NULL)
+    return (NULL);
   while (env[i] && env[i][j] && env[i][j] != '=')
     j += 1;
   j += 1;

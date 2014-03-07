@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Wed Mar  5 19:05:12 2014 chapui_s
+** Last update Fri Mar  7 00:31:40 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -38,8 +38,16 @@ typedef struct	s_pipe
   int		*list_in;
   int		*list_out;
   int		*list_fd;
+  int		nb_cmd_to_wait;
   t_cmd		**cmd;
 }		t_pipe;
+
+typedef struct	s_env
+{
+  int		i;
+  int		zero;
+  int		u;
+}		t_env;
 
 # define TERM_BUF_SIZE	4096
 
@@ -71,7 +79,6 @@ char		**seperate_wordtab(char *str, char separator);
 int		restore_term(struct termios *term_attr);
 void		rm_in_list(t_read **list, int nb);
 int		my_strlen(char *str);
-int		exec_it(char *str, char **env, int *pipefd, int i, int nb_pipe);
 char		**my_str_to_wordtab(char *str);
 t_cmd		*str_to_cmd(char *str, char **env);
 char		*find_cmd(char *str, char **environ, int i, char *tmp);
@@ -82,12 +89,29 @@ int		cmd_null(t_cmd *cmd, char *str);
 int		get_right_redirection(char *str, t_cmd *cmd);
 int		get_left_redirection(char *str, t_cmd *cmd);
 char		*get_str_without_redi(char *str, t_cmd *cmd);
-int		do_redirections(t_pipe *list_pipe, int i, char **env);
+int		do_redirections(t_pipe *list_pipe,
+				int i,
+				char **env,
+				int is_redi);
 char		*realloc_it(char *dest, char *src);
 char		*get_next_line(const int fd);
 int		restore_term_after_redi(struct termios *term_attr);
 int		is_good_string_redi(char *str, char *good_string);
 char		*rm_good_string(char *str);
 void		clean_screen(char **env);
+int		is_builtin(char *str);
+char		*make_path_builtin(char *str);
+int		do_builtin(t_cmd *cmd,
+			   char **environ,
+			   t_pipe *list_pipe,
+			   int fd_out);
+char		*my_strchr(char *s, int c);
+int		my_unsetenv(char ***env, char *variable);
+void		usage_env(void);
+char		*left_egale(char *str);
+char		*right_egale(char *str);
+int		my_exit(char *str);
+int		my_cd(char *path, char **env);
+int		my_atoi(char *str);
 
 #endif /* !MINISH_H_ */

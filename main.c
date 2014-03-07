@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Wed Mar  5 18:43:08 2014 chapui_s
+** Last update Fri Mar  7 00:35:48 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -67,7 +67,8 @@ int		prepare_pipe(int nb_cmd_pipe,
 
 int		loop_exec_pipe(int nb_cmd_pipe,
 			       t_pipe *list_pipe,
-			       char **env)
+			       char **env,
+			       int is_redi)
 {
   unsigned int	i;
   unsigned int	j;
@@ -77,14 +78,21 @@ int		loop_exec_pipe(int nb_cmd_pipe,
   j = 0;
   while (i < nb_cmd_pipe)
   {
-    if ((pid = fork()) == 0)
+    if (is_builtin(list_pipe->cmd[i]->filename) == 1)
+    {
+      do_builtin(list_pipe->cmd[i], env, list_pipe,
+		 (i < nb_cmd_pipe - 1) ?
+		 (list_pipe->list_out[i]) : (fd_tty));
+    }
+    else if ((pid = fork()) == 0)
     {
       j = 0;
-      do_redirections(list_pipe, i, env);
+      if ((do_redirections(list_pipe, i, env, is_redi)) == -1)
+	return (-1);
       while (j < 2 * (nb_cmd_pipe - 1))
       	close(list_pipe->list_fd[j++]);
       if ((execve(list_pipe->cmd[i]->cmd_path,
-		  list_pipe->cmd[i]->args, env)) == -1)
+		       list_pipe->cmd[i]->args, env)) == -1)
 	return (puterror("error: execve\n"));
     }
     else if (pid == -1)
@@ -93,15 +101,18 @@ int		loop_exec_pipe(int nb_cmd_pipe,
   }
 }
 
-void		wait_proc(int nb_cmd_pipe, int *status, int *list_fd)
+void		wait_proc(int nb_cmd_pipe,
+			  int *status,
+			  int *list_fd,
+			  t_pipe *list_pipe)
 {
-  unsigned int	i;
+  int		i;
 
   i = 0;
   while (i < 2 * (nb_cmd_pipe - 1))
     close(list_fd[i++]);
   i = 0;
-  while (i < nb_cmd_pipe)
+  while (i < list_pipe->nb_cmd_to_wait)
   {
     wait(&(status[i]));
     if (WIFSIGNALED(status[i]))
@@ -115,6 +126,18 @@ void		wait_proc(int nb_cmd_pipe, int *status, int *list_fd)
     }
     else if (WIFSTOPPED(status[i]))
       puterror("Stopped\n");
+    i += 1;
+  }
+}
+
+void		init_status(int *status, int nb_cmd_pipe)
+{
+  unsigned int	i;
+
+  i = 0;
+  while (i < nb_cmd_pipe)
+  {
+    status[i] = 0;
     i += 1;
   }
 }
@@ -138,6 +161,7 @@ t_pipe		*malloc_pipe_struct(t_pipe *list_pipe,
       || (list_pipe->cmd = (t_cmd**)malloc(sizeof(t_cmd*) * (i + 1))) == NULL)
     return (puterror_null("error: could not alloc\n"));
   i = 0;
+  init_status(list_pipe->status, nb_cmd_pipe);
   while (str_pipe[i])
   {
     if ((list_pipe->cmd[i] = str_to_cmd(str_pipe[i++], env)) == NULL)
@@ -174,6 +198,17 @@ void		free_list_str_pipe(t_pipe *list_pipe, char **str_pipe)
   free(str_pipe);
 }
 
+void		free_str_tab(char **str_tab)
+{
+  unsigned int	i;
+
+  i = 0;
+  while (str_tab[i])
+    free(str_tab[i++]);
+  free(str_tab[i]);
+  free(str_tab);
+}
+
 int		exec_tab(char *str,
 			 char **env,
 			 int nb_cmd_pipe,
@@ -191,9 +226,10 @@ int		exec_tab(char *str,
   if ((prepare_pipe(nb_cmd_pipe, list_pipe->list_in,
   		    list_pipe->list_out, list_pipe->list_fd)) == -1)
     return (-1);
-  if ((loop_exec_pipe(nb_cmd_pipe, list_pipe, env)) == -1)
+  list_pipe->nb_cmd_to_wait = nb_cmd_pipe;
+  if ((loop_exec_pipe(nb_cmd_pipe, list_pipe, env, 1)) == -1)
     return (-1);
-  wait_proc(nb_cmd_pipe, list_pipe->status, list_pipe->list_fd);
+  wait_proc(nb_cmd_pipe, list_pipe->status, list_pipe->list_fd, list_pipe);
   free_list_str_pipe(list_pipe, str_pipe);
 }
 
@@ -218,6 +254,7 @@ int	exec_cmd(char **env)
     exec_tab(str_tab[i], env, get_nb_cmd_pipe(str_tab[i]), NULL);
     i += 1;
   }
+  free_str_tab(str_tab);
   return (0);
 }
 

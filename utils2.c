@@ -5,10 +5,11 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 15:01:21 2014 chapui_s
-** Last update Wed Mar  5 18:36:30 2014 chapui_s
+** Last update Thu Mar  6 15:37:06 2014 chapui_s
 */
 
 #include <stdlib.h>
+#include "minish.h"
 
 int	is_only_spaces(char *str)
 {
@@ -78,4 +79,16 @@ char		*rm_good_string(char *str)
     i += 1;
   }
   return (str);
+}
+
+int	cmd_null(t_cmd *cmd, char *str)
+{
+  if (str && str[0] != '\0' && is_only_spaces(str) == 0)
+  {
+    puterror("Cannot find the command '");
+    if (cmd && cmd->args)
+      puterror(cmd->args[0]);
+    puterror("'...\n");
+  }
+  return (-1);
 }
