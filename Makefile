@@ -5,7 +5,7 @@
 ## Login   <chapui_s@epitech.eu>
 ## 
 ## Started on  Sun Feb  9 17:43:54 2014 chapui_s
-## Last update Sat Mar  8 17:33:10 2014 chapui_s
+## Last update Sat Mar  8 19:03:52 2014 chapui_s
 ##
 
 SRC	= main.c \
@@ -47,7 +47,9 @@ SRC	= main.c \
 	  list_historic.c \
 	  disp_historic.c \
 	  historic.c \
-	  free_lists.c
+	  free_lists.c \
+	  close_pipe.c \
+	  push_read.c
 
 NAME	= mysh
 

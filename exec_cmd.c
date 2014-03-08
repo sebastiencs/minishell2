@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Sat Mar  8 00:50:42 2014 chapui_s
+** Last update Sat Mar  8 20:44:05 2014 chapui_s
 */
 
 #include <signal.h>
@@ -13,37 +13,37 @@
 #include <unistd.h>
 #include "minish.h"
 
+static void	exec_it(t_pipe *l_pip, char **env, int i)
+{
+  if ((execve(l_pip->cmd[i]->cmd_path, l_pip->cmd[i]->args, env)) == -1)
+  {
+    puterror("error: execve\n");
+    exit(0);
+  }
+}
+
 int		loop_exec_pipe(int nb_cmd_pipe,
-			       t_pipe *list_pipe,
+			       t_pipe *l_pip,
 			       char **env,
 			       int is_redi)
 {
   unsigned int	i;
-  unsigned int	j;
   pid_t		pid;
-  int		ret_built;
+  int		ret;
 
   i = 0;
-  j = 0;
   while (i < nb_cmd_pipe)
   {
-    if (is_builtin(list_pipe->cmd[i]->filename) == 1)
+    if (is_builtin(l_pip->cmd[i]->filename) == 1
+	&& (ret = do_builtin(l_pip->cmd[i], env, l_pip, (i < nb_cmd_pipe - 1) ?
+			     (l_pip->list_out[i]) : (fd_tty))) != 0)
+      return (ret);
+    else if ((is_builtin(l_pip->cmd[i]->filename) == 0) && (pid = fork()) == 0)
     {
-      if ((ret_built = do_builtin(list_pipe->cmd[i], env, list_pipe,
-				  (i < nb_cmd_pipe - 1) ?
-				  (list_pipe->list_out[i]) : (fd_tty))) != 0)
-	return (ret_built);
-    }
-    else if ((pid = fork()) == 0)
-    {
-      j = 0;
-      if ((do_redirections(list_pipe, i, env, is_redi)) == -1)
-	return (-1);
-      while (j < 2 * (nb_cmd_pipe - 1))
-      	close(list_pipe->list_fd[j++]);
-      if ((execve(list_pipe->cmd[i]->cmd_path,
-		       list_pipe->cmd[i]->args, env)) == -1)
-	return (puterror("error: execve\n"));
+      if ((do_redirections(l_pip, i, env, is_redi)) == -1)
+	exit(0);
+      close_pipe(l_pip, nb_cmd_pipe);
+      exec_it(l_pip, env, i);
     }
     else if (pid == -1)
       return (puterror("error: fork\n"));
@@ -79,20 +79,6 @@ void		wait_proc(int nb_cmd_pipe,
       puterror("Stopped\n");
     i += 1;
   }
-}
-
-static int	is_because_no_found(t_cmd **cmd, char **str_pipe)
-{
-  unsigned int	i;
-
-  i = 0;
-  while (str_pipe[i])
-  {
-    if (cmd[i]->cmd_path == NULL)
-      return (1);
-    i += 1;
-  }
-  return (0);
 }
 
 static int	exec_tab(char *str,

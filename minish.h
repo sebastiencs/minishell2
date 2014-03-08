@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Sat Mar  8 16:43:25 2014 chapui_s
+** Last update Sat Mar  8 20:15:54 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -76,7 +76,7 @@ char		*get_term(char **env);
 int		get_size_list(t_read *list);
 void		my_tputs2(int n1, int n2, int n3);
 int		get_char(t_read **list_read, char *buf, int *curs_cur, int *is_rm);
-int		go_left(int *curs_cur, int *is_rm);
+int		go_left(int *curs_cur, int *is_rm, t_read **list_read);
 int		rm_left(t_read **list_read, int *curs_cur);
 int		rm_cur(t_read **list_read, char *buf, int *curs_cur);
 int		go_right(t_read **list_read, int *curs_cur, int *is_rm);
@@ -88,7 +88,7 @@ char		*list_to_str(t_read *list_read,
 int		check_str(char *str);
 char		**seperate_wordtab(char *str, char separator);
 int		restore_term(struct termios *term_attr);
-void		rm_in_list(t_read **list, int nb);
+int		rm_in_list(t_read **list, int nb);
 int		my_strlen(char *str);
 char		**my_str_to_wordtab(char *str);
 t_cmd		*str_to_cmd(char *str, char **env);
@@ -147,5 +147,8 @@ t_read		*move_in_historic(char *buf,
 				  t_historic **historic,
 				  t_read *list_read,
 				  int *curs_cur);
+int		check_str_redi(char *str);
+void		close_pipe(t_pipe *list_pipe, int nb_cmd_pipe);
+t_read		*create_read(char c);
 
 #endif /* !MINISH_H_ */

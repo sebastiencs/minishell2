@@ -5,13 +5,13 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 18:14:44 2014 chapui_s
-** Last update Wed Feb 26 14:57:59 2014 chapui_s
+** Last update Sat Mar  8 20:16:13 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-static t_read	*create_read(char c)
+t_read		*create_read(char c)
 {
   t_read	*new;
 
@@ -23,53 +23,32 @@ static t_read	*create_read(char c)
     new->prec = NULL;
     new->next = NULL;
   }
+  else
+    puterror("error: could not alloc\n");
   return (new);
 }
 
-int		push_read(t_read **list, char c, int place)
+static int	rm_begin(t_read **list)
 {
   t_read	*tmp;
-  t_read	*tmp2;
-  int		i;
 
-  i = 0;
   tmp = *list;
-  if (*list)
+  if (tmp->next)
   {
-    if (place > 0)
-    {
-      while (tmp->next && i++ < place - 2)
-	tmp = tmp->next;
-      tmp2 = tmp->next;
-      if ((tmp->next = create_read(c)))
-      {
-	tmp->next->prec = tmp;
-	if (tmp2)
-	{
-	  tmp->next->next = tmp2;
-	  tmp2->prec = tmp->next;
-	}
-	return (0);
-      }
-    }
-    else
-    {
-      if ((tmp = create_read(c)))
-      {
-	tmp->next = *list;
-	*list = tmp;
-	return (0);
-      }
-    }
+    tmp = tmp->next;
+    free(tmp->prec);
+    tmp->prec = NULL;
+    *list = tmp;
   }
-  else
-    if ((*list = create_read(c)))
-      return (0);
-  puterror("error -> could not alloc\n");
-  return (-1);
+  else if (tmp)
+  {
+    free(tmp);
+    *list = NULL;
+  }
+  return (0);
 }
 
-void		rm_in_list(t_read **list, int nb)
+int		rm_in_list(t_read **list, int nb)
 {
   t_read	*tmp;
   int		i;
@@ -79,29 +58,16 @@ void		rm_in_list(t_read **list, int nb)
   if (tmp == NULL)
     return ;
   if (nb == 0)
-  {
-    if (tmp->next)
-    {
-      tmp = tmp->next;
-      free(tmp->prec);
-      tmp->prec = NULL;
-      *list = tmp;
-    }
-    else if (tmp)
-    {
-      free(tmp);
-      *list = NULL;
-    }
-    return ;
-  }
+    return (rm_begin(list));
   while (i++ < nb && tmp)
     tmp = tmp->next;
   if (tmp == NULL)
-    return ;
+    return (0);
   tmp->prec->next = tmp->next;
   if (tmp->next)
     tmp->next->prec = tmp->prec;
   free(tmp);
+  return (0);
 }
 
 int		get_size_list(t_read *list)

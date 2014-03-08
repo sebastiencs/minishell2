@@ -6,7 +6,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Tue Mar  4 22:47:48 2014 chapui_s
-** Last update Fri Mar  7 21:25:27 2014 chapui_s
+** Last update Sat Mar  8 20:33:08 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -41,7 +41,7 @@ static int	do_simple_left_redi(t_pipe *list_pipe, int i)
   {
     puterror("error: ");
     puterror(list_pipe->cmd[i]->redi_left);
-    puterror(" no such file\n");
+    puterror(": no such file\n");
     return (-1);
   }
   if ((dup2(fd, 0)) == -1)
@@ -94,8 +94,11 @@ int		do_redirections(t_pipe *list_pipe,
 				char **env,
 				int is_redi)
 {
+  int		ret;
+
+  ret = 0;
   if (list_pipe->cmd[i]->is_redi_left != 0)
-    do_redi_left(list_pipe, i, env);
+    ret += do_redi_left(list_pipe, i, env);
   else if (is_redi == 1)
   {
     if (list_pipe->list_in[i] != -1)
@@ -103,12 +106,12 @@ int		do_redirections(t_pipe *list_pipe,
 	return (puterror("error: dup2\n"));
   }
   if (list_pipe->cmd[i]->is_redi_right != 0)
-    do_redi_right(list_pipe, i);
+    ret += do_redi_right(list_pipe, i);
   else if (is_redi == 1)
   {
     if (list_pipe->list_out[i] != -1)
       if ((dup2(list_pipe->list_out[i], 1)) == -1)
         return (puterror("error: dup2\n"));
   }
-  return (0);
+  return (ret);
 }

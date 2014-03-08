@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sat Mar  8 16:39:00 2014 chapui_s
-** Last update Sat Mar  8 17:25:09 2014 chapui_s
+** Last update Sat Mar  8 19:50:03 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -60,17 +60,11 @@ static t_read		*find_down_hist(t_historic **historic)
   return (NULL);
 }
 
-static void		clean_line(t_read *list_read)
+static void		clean_line(void)
 {
-  t_read		*tmp;
-
-  tmp = list_read;
-  while (tmp)
-  {
-    my_tputs(tgetstr("le", NULL));
-    my_tputs(tgetstr("dc", NULL));
-    tmp = tmp->next;
-  }
+  my_tputs(tgetstr("dl", NULL));
+  my_tputs(tgoto(tgetstr("ch", NULL), 0, 0));
+  prompt();
 }
 
 t_read			*move_in_historic(char *buf,
@@ -82,13 +76,16 @@ t_read			*move_in_historic(char *buf,
 
   if (*historic == NULL)
     return (list_read);
-  clean_line(list_read);
+  clean_line();
   if (buf[2] == 65)
     to_return = find_up_hist(historic);
   else
   {
     if ((to_return = find_down_hist(historic)) == list_read)
+    {
+      *curs_cur = 0;
       return (NULL);
+    }
   }
   if (to_return)
   {
