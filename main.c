@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Sat Mar  8 22:05:11 2014 chapui_s
+** Last update Sat Mar  8 22:15:29 2014 chapui_s
 */
 
 #include <signal.h>
@@ -54,7 +54,6 @@ static char	**init_sh(char **env, struct termios *term_attr)
       puterror("error: could not open /dev/tty\n");
     if (init_term(env, term_attr) == -1 || fd_tty == -1)
       fd_tty = 1;
-  write(fd_tty, "OK\n", 3);
   }
   else
     fd_tty = 1;
