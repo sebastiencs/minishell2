@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 15:50:25 2014 chapui_s
-** Last update Thu Mar  6 23:04:40 2014 chapui_s
+** Last update Sat Mar  8 01:42:07 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -49,25 +49,25 @@ int		do_builtin(t_cmd *cmd,
   (list_pipe->nb_cmd_to_wait) -= 1;
   if (my_setenv(&environ, "_", cmd->filename) == -1)
     return (-1);
-  if (my_strcmp(cmd->filename, "setenv") == 0)
-    return (my_setenv(&environ, cmd->args[1], cmd->args[2]));
-  else if (my_strcmp(cmd->filename, "unsetenv") == 0)
-    return (my_unsetenv(&environ, cmd->args[1]));
-  else if (my_strcmp(cmd->filename, "env") == 0)
-    return (my_env(environ, cmd, fd_out));
-  else if (my_strcmp(cmd->filename, "cd") == 0)
-    return (my_cd(cmd->args[1], environ));
-  else if (my_strcmp(cmd->filename, "exit") == 0)
-    return (my_exit(cmd->args[1]));
-  return (0);
+  return ((my_strcmp(cmd->filename, "setenv") == 0) ?
+	  (my_setenv(&environ, cmd->args[1], cmd->args[2]))
+	  : (my_strcmp(cmd->filename, "unsetenv") == 0) ?
+	  (my_unsetenv(&environ, cmd->args[1]))
+	  : (my_strcmp(cmd->filename, "env") == 0) ?
+	  (my_env(environ, cmd, fd_out))
+	  : (my_strcmp(cmd->filename, "cd") == 0) ?
+	  (my_cd(cmd->args[1], environ))
+	  : (my_strcmp(cmd->filename, "exit") == 0) ?
+	  (my_exit(cmd->args[1]))
+	  : (0));
 }
 
 void		usage_env(void)
 {
-  my_putstr("Usage: env [OPTION]... [-] [NAME=VALUE]... [COMMAND [ARG]...]\n\n");
+  my_putstr("Usage: env [OPTION].. [-] [NAME=VALUE].. [COMMAND [ARG]..]\n\n");
   my_putstr("\t-i      start with an empty environment\n");
-  my_putstr("\t-0      end each output line with 0 byte rather than newline\n");
-  my_putstr("\t-u      remove variable from the environment\n");
+  my_putstr("\t-0      end all output line with 0 byte rather than newline\n");
+  my_putstr("\t-u      remove a variable from the environment\n");
   my_putstr("\t--help  display help\n");
   my_putstr("\nIf no COMMAND, print the resulting environment.\n");
 }

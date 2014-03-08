@@ -2,5 +2,7 @@ Norme:	loop_exec_pipe
 	exec_with_env
 	disp_env
 	exec_cmd
+	push_read
+	rm_in_list
 
 Gerer:	env -u USER > test

@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 18:09:44 2014 chapui_s
-** Last update Fri Mar  7 21:03:45 2014 chapui_s
+** Last update Sat Mar  8 14:36:09 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -41,6 +41,8 @@ char		*clean_str(char *str)
   while (str[i])
   {
     j = i;
+    if (str[i] == '\t')
+      str[i] = ' ';
     if (str[i] && str[i] == ' ' && str[i + 1] == ' ')
     {
       while (str[j])
@@ -56,7 +58,9 @@ char		*clean_str(char *str)
   return (str);
 }
 
-char		*list_to_str(t_read *list_read, int is_clean)
+char		*list_to_str(t_read *list_read,
+			     int is_clean,
+			     t_historic **historic)
 {
   char		*str;
   t_read	*tmp;
@@ -73,6 +77,8 @@ char		*list_to_str(t_read *list_read, int is_clean)
     tmp = tmp->next;
   }
   str[i] = 0;
+  if (my_strlen(str) != 0 && is_clean == 1)
+    push_historic(historic, list_read);
   if (is_clean == 1)
     str = clean_str(str);
   return (str);

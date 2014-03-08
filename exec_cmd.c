@@ -5,9 +5,10 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Fri Mar  7 21:02:19 2014 chapui_s
+** Last update Sat Mar  8 00:50:42 2014 chapui_s
 */
 
+#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "minish.h"
@@ -118,6 +119,8 @@ static int	exec_tab(char *str,
   if ((ret_exec = loop_exec_pipe(nb_cmd_pipe, list_pipe, env, 1)) != 0)
     return (ret_exec);
   wait_proc(nb_cmd_pipe, list_pipe->status, list_pipe->list_fd, list_pipe);
+  if ((update_env(&env, list_pipe->cmd)) == -1)
+    return (-1);
   free_list_str_pipe(list_pipe, str_pipe);
   return (0);
 }
@@ -132,7 +135,6 @@ int		exec_cmd(char **env)
   i = 0;
   if ((str_cmd = chose_read(env, 1)) == NULL)
     return (-1);
-  /* write(fd_tty, "\n", 1); */
   if ((my_strlen(str_cmd)) == 0)
     return (0);
   if ((check_str(str_cmd)) == -1)

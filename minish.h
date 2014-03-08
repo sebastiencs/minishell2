@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Fri Mar  7 21:04:38 2014 chapui_s
+** Last update Sat Mar  8 13:11:08 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -13,45 +13,54 @@
 
 # include <termios.h>
 
-typedef struct	s_read
+typedef struct		s_read
 {
-  char		c;
-  unsigned int	is_current;
-  struct s_read	*prec;
-  struct s_read	*next;
-}		t_read;
+  char			c;
+  unsigned int		is_current;
+  struct s_read		*prec;
+  struct s_read		*next;
+}			t_read;
 
-typedef struct	s_cmd
+typedef struct		s_cmd
 {
-  char		*filename;
-  char		*cmd_path;
-  char		**args;
-  int		is_redi_right;
-  char		*redi_right;
-  int		is_redi_left;
-  char		*redi_left;
-}		t_cmd;
+  char			*filename;
+  char			*cmd_path;
+  char			**args;
+  int			is_redi_right;
+  char			*redi_right;
+  int			is_redi_left;
+  char			*redi_left;
+}			t_cmd;
 
-typedef struct	s_pipe
+typedef struct		s_pipe
 {
-  int		*status;
-  int		*list_in;
-  int		*list_out;
-  int		*list_fd;
-  int		nb_cmd_to_wait;
-  t_cmd		**cmd;
-}		t_pipe;
+  int			*status;
+  int			*list_in;
+  int			*list_out;
+  int			*list_fd;
+  int			nb_cmd_to_wait;
+  t_cmd			**cmd;
+}			t_pipe;
 
-typedef struct	s_env
+typedef struct		s_env
 {
-  int		i;
-  int		zero;
-  int		u;
-}		t_env;
+  int			i;
+  int			zero;
+  int			u;
+}			t_env;
+
+typedef struct		s_historic
+{
+  t_read		*list_read;
+  int			is_cur;
+  struct s_historic	*prec;
+  struct s_historic	*next;
+}			t_historic;
 
 # define TERM_BUF_SIZE	4096
 
 int		fd_tty;
+char		*username;
 void		*puterror_null(char *str);
 int		puterror(char *str);
 int		my_putstr(char *str);
@@ -71,9 +80,10 @@ int		rm_left(t_read **list_read, int *curs_cur);
 int		rm_cur(t_read **list_read, char *buf, int *curs_cur);
 int		go_right(t_read **list_read, int *curs_cur, int *is_rm);
 char		*search_in_env(char **env, char *var);
-void		prompt(char **env);
-char		*read_cmd(char **env, int is_prompt);
-char		*list_to_str(t_read *list_read, int is_clean);
+void		prompt(void);
+char		*list_to_str(t_read *list_read,
+			     int is_clean,
+			     t_historic **historic);
 int		check_str(char *str);
 char		**seperate_wordtab(char *str, char separator);
 int		restore_term(struct termios *term_attr);
@@ -126,5 +136,9 @@ int		prepare_pipe(int nb_cmd_pipe,
 int		exec_cmd(char **env);
 char		*chose_read(char **env, int is_prompt);
 char		*clean_str(char *str);
+void		get_sigint(int sig);
+int		update_env(char ***env, t_cmd **cmd);
+int		push_historic(t_historic **historic,
+			      t_read *list_read);
 
 #endif /* !MINISH_H_ */

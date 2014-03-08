@@ -5,23 +5,23 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:30:35 2014 chapui_s
-** Last update Wed Feb 26 17:45:38 2014 chapui_s
+** Last update Sat Mar  8 00:35:00 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-void	prompt(char **env)
+void	prompt(void)
 {
   char	*user;
 
-  if ((user = search_in_env(env, "USER=")) == NULL)
+  if (my_strlen(username) == 0)
   {
     my_putstr("$> ");
   }
   else
   {
-    my_putstr(user);
+    my_putstr(username);
     my_putstr(" > ");
   }
 }

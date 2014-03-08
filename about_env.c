@@ -5,18 +5,18 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:23:41 2014 chapui_s
-** Last update Thu Mar  6 19:55:15 2014 chapui_s
+** Last update Sat Mar  8 11:10:21 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-char	*search_in_env(char **env, char *var)
+char		*search_in_env(char **env, char *var)
 {
-  int	i;
-  int	j;
-  char	*value;
-  int	size_var;
+  int		i;
+  int		j;
+  char		*value;
+  int		size_var;
 
   i = 0;
   j = 0;
@@ -34,4 +34,16 @@ char	*search_in_env(char **env, char *var)
   j += 1;
   value = &(env[i][j]);
   return (value);
+}
+
+int		update_env(char ***env, t_cmd **cmd)
+{
+  unsigned int	i;
+
+  i = 0;
+  while (cmd[i + 1])
+    i += 1;
+  if ((my_setenv(env, "_", cmd[i]->cmd_path)) == -1)
+    return (-1);
+  return (0);
 }

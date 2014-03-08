@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 20:11:19 2014 chapui_s
-** Last update Tue Mar  4 18:19:12 2014 chapui_s
+** Last update Sat Mar  8 15:51:43 2014 chapui_s
 */
 
 #include "minish.h"
@@ -16,7 +16,7 @@ int		check_str(char *str)
 
   i = 0;
   if (str[0] == ';' || str[0] == '|')
-    return (puterror("\nerror: expression expected near ';' or '|'.\n"));
+    return (puterror("error: expression expected near ';' or '|'.\n"));
   while (str[i])
   {
     if ((str[i] == ';' || str[i] == '|')
@@ -24,12 +24,12 @@ int		check_str(char *str)
 	    || (str[i + 1] == ' '
 		&& (str[i + 2] == ';' || str[i + 2] == '|'))))
     {
-      puterror("\nerror: expression expected between ';' or '|'.\n");
+      puterror("error: expression expected between ';' or '|'.\n");
       return (-1);
     }
     i += 1;
   }
   if (str[i - 1] == ';' || str[i - 1] == '|')
-    return (puterror("\nerror: expression expected near ';' or '|'.\n"));
+    return (puterror("error: expression expected near ';' or '|'.\n"));
   return (0);
 }
