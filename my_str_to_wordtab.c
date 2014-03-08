@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 15:05:04 2014 chapui_s
-** Last update Tue Mar  4 21:54:37 2014 chapui_s
+** Last update Sat Mar  8 17:40:30 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -81,10 +81,10 @@ static int	save_words(char **tab, char *str, int nb_words)
   return (0);
 }
 
-char	**my_str_to_wordtab(char *str)
+char		**my_str_to_wordtab(char *str)
 {
-  int	nb_words;
-  char	**tab;
+  int		nb_words;
+  char		**tab;
 
   nb_words = count_words(str);
   if ((tab = (char**)malloc(sizeof(char*) * (nb_words + 1))) == NULL)

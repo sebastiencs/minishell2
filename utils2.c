@@ -5,15 +5,15 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 15:01:21 2014 chapui_s
-** Last update Fri Mar  7 20:45:14 2014 chapui_s
+** Last update Sat Mar  8 17:44:09 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-int	is_only_spaces(char *str)
+int		is_only_spaces(char *str)
 {
-  int	i;
+  int		i;
 
   i = 0;
   while (str && str[i])
@@ -81,7 +81,7 @@ char		*rm_good_string(char *str)
   return (str);
 }
 
-int	cmd_null(t_cmd *cmd, char *str)
+int		cmd_null(t_cmd *cmd, char *str)
 {
   if (str && str[0] != '\0' && is_only_spaces(str) == 0)
   {

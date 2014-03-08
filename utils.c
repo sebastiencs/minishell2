@@ -5,21 +5,21 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 18:18:00 2014 chapui_s
-** Last update Tue Mar  4 21:15:49 2014 chapui_s
+** Last update Sat Mar  8 17:46:41 2014 chapui_s
 */
 
 #include <stdlib.h>
 
-int	my_strcmp(char *s1, char *s2)
+int		my_strcmp(char *s1, char *s2)
 {
   if (s1 == NULL && s2 != NULL)
     return (1);
   return ((*s1 == *s2 && *s1) ? (my_strcmp(++s1, ++s2)) : (*s1 - *s2));
 }
 
-int	my_strncmp(char *s1, char *s2, int n)
+int		my_strncmp(char *s1, char *s2, int n)
 {
-  int	i;
+  int		i;
 
   i = 0;
   while (i < n)
@@ -33,9 +33,9 @@ int	my_strncmp(char *s1, char *s2, int n)
   return (0);
 }
 
-int	my_strlen(char *str)
+int		my_strlen(char *str)
 {
-  int	size;
+  int		size;
 
   size = 0;
   while (str && str[size])
@@ -43,9 +43,9 @@ int	my_strlen(char *str)
   return (size);
 }
 
-void	buf_zero(char *buf, int size)
+void		buf_zero(char *buf, int size)
 {
-  int	i;
+  int		i;
 
   i = 0;
   while (i < size)
@@ -55,9 +55,9 @@ void	buf_zero(char *buf, int size)
   }
 }
 
-char	*get_term(char **env)
+char		*get_term(char **env)
 {
-  int	i;
+  int		i;
 
   i = 0;
   if (env == NULL || *env == NULL)

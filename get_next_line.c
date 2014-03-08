@@ -5,17 +5,17 @@
 ** Login   <chapui_s@epitech.net>
 **
 ** Started on  Wed Nov 20 21:02:19 2013 chapui_s
-** Last update Sun Feb  9 17:37:26 2014 chapui_s
+** Last update Sat Mar  8 17:26:02 2014 chapui_s
 */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include "get_next_line.h"
 
-t_fd	*find_fd_or_create_it(t_fd **pile_fd, int fd)
+t_fd		*find_fd_or_create_it(t_fd **pile_fd, int fd)
 {
-  t_fd	*tmp;
-  t_fd	*new;
+  t_fd		*tmp;
+  t_fd		*new;
 
   tmp = *pile_fd;
   if (tmp && tmp->fd == fd)
@@ -41,9 +41,9 @@ t_fd	*find_fd_or_create_it(t_fd **pile_fd, int fd)
   return (new);
 }
 
-int	is_backslash_n(char *str)
+int		is_backslash_n(char *str)
 {
-  int	i;
+  int		i;
 
   i = 0;
   if (str == NULL)
@@ -57,12 +57,12 @@ int	is_backslash_n(char *str)
   return (0);
 }
 
-int	add_str_to(char **dest, char *src)
+int		add_str_to(char **dest, char *src)
 {
-  char	*tmp;
-  char	*tmp2;
-  int	i;
-  int	j;
+  char		*tmp;
+  char		*tmp2;
+  int		i;
+  int		j;
 
   i = 0;
   j = 0;
@@ -86,11 +86,11 @@ int	add_str_to(char **dest, char *src)
   return (0);
 }
 
-char	*return_it(char **str, char **to_return)
+char		*return_it(char **str, char **to_return)
 {
-  int	i;
-  int	j;
-  char	*new_str;
+  int		i;
+  int		j;
+  char		*new_str;
 
   i = 0;
   j = 0;

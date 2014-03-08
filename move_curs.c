@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 15:35:54 2014 chapui_s
-** Last update Wed Mar  5 18:58:44 2014 chapui_s
+** Last update Sat Mar  8 17:35:06 2014 chapui_s
 */
 
 #include <term.h>
@@ -13,7 +13,10 @@
 #include <unistd.h>
 #include "minish.h"
 
-int	get_char(t_read **list_read, char *buf, int *curs_cur, int *is_rm)
+int		get_char(t_read **list_read,
+			 char *buf,
+			 int *curs_cur,
+			 int *is_rm)
 {
   if (buf[1] == 0 && buf[0] >= 32 && buf[0] <= 126 && buf[0] != '\t')
   {
@@ -28,7 +31,7 @@ int	get_char(t_read **list_read, char *buf, int *curs_cur, int *is_rm)
   return (1);
 }
 
-int	go_left(int *curs_cur, int *is_rm)
+int		go_left(int *curs_cur, int *is_rm)
 {
   if ((*curs_cur) > 0)
     my_tputs(tgetstr("le", NULL));
@@ -38,7 +41,7 @@ int	go_left(int *curs_cur, int *is_rm)
   return (0);
 }
 
-int	rm_left(t_read **list_read, int *curs_cur)
+int		rm_left(t_read **list_read, int *curs_cur)
 {
   if ((*curs_cur) > 0)
   {
@@ -50,7 +53,7 @@ int	rm_left(t_read **list_read, int *curs_cur)
   return (0);
 }
 
-int	rm_cur(t_read **list_read, char *buf, int *curs_cur)
+int		rm_cur(t_read **list_read, char *buf, int *curs_cur)
 {
   if (buf[3] == 126)
   {
@@ -60,7 +63,7 @@ int	rm_cur(t_read **list_read, char *buf, int *curs_cur)
   return (0);
 }
 
-int	go_right(t_read **list_read, int *curs_cur, int *is_rm)
+int		go_right(t_read **list_read, int *curs_cur, int *is_rm)
 {
   if ((*curs_cur) < get_size_list(*list_read))
   {

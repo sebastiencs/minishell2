@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 16:00:49 2014 chapui_s
-** Last update Thu Mar  6 16:02:10 2014 chapui_s
+** Last update Sat Mar  8 16:26:31 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -103,10 +103,10 @@ int	my_setenv(char ***env, char *variable, char *value)
   i = 0;
   tmp_var = *env;
   if (variable == NULL || value == NULL)
-    return (puterror("usage: setenv VARIABLE VALUE\n"));
+    return (my_putstr("usage: setenv VARIABLE VALUE\n"));
   if (variable == NULL || my_strlen(variable) == 0
       || my_strchr(variable, '=') != NULL)
-    return (puterror("error : variable NULL or '=' in name\n"));
+    return (my_putstr("error : variable NULL or '=' in name\n"));
   if ((variable = add_egale(variable)) == NULL)
     return (-1);
   while (tmp_var && tmp_var[i]

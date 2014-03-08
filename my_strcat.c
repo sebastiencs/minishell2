@@ -5,16 +5,16 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 14:59:46 2014 chapui_s
-** Last update Mon Mar  3 14:59:50 2014 chapui_s
+** Last update Sat Mar  8 17:38:25 2014 chapui_s
 */
 
 #include <stdlib.h>
 
-char	*str_cat(char *s1, char *s2)
+char		*str_cat(char *s1, char *s2)
 {
-  char	*dest;
-  int	i;
-  int	j;
+  char		*dest;
+  int		i;
+  int		j;
 
   i = 0;
   j = 0;

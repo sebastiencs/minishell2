@@ -5,21 +5,21 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Wed Dec 18 19:54:06 2013 Sebastien Chapuis
-** Last update Thu Mar  6 19:51:22 2014 chapui_s
+** Last update Sat Mar  8 17:40:44 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-int	my_unsetenv(char ***env, char *variable)
+int		my_unsetenv(char ***env, char *variable)
 {
-  int	i;
-  char	**tmp_var;
+  int		i;
+  char		**tmp_var;
 
   i = 0;
   tmp_var = *env;
   if (variable == NULL)
-    return (puterror("usage: unsetenv VARIABLE\n"));
+    return (my_putstr("usage: unsetenv VARIABLE\n"));
   if (variable == NULL || my_strlen(variable) == 0
       || my_strchr(variable, '=') != NULL)
   {

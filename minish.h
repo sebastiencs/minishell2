@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Sat Mar  8 13:11:08 2014 chapui_s
+** Last update Sat Mar  8 16:43:25 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -57,7 +57,8 @@ typedef struct		s_historic
   struct s_historic	*next;
 }			t_historic;
 
-# define TERM_BUF_SIZE	4096
+# define TERM_BUF_SIZE		4096
+# define HISTORIC_SIZE_MAX	15
 
 int		fd_tty;
 char		*username;
@@ -140,5 +141,11 @@ void		get_sigint(int sig);
 int		update_env(char ***env, t_cmd **cmd);
 int		push_historic(t_historic **historic,
 			      t_read *list_read);
+void		disp_list_read(t_read *list_read);
+void		my_putchar(char c);
+t_read		*move_in_historic(char *buf,
+				  t_historic **historic,
+				  t_read *list_read,
+				  int *curs_cur);
 
 #endif /* !MINISH_H_ */

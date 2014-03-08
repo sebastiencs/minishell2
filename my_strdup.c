@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 14:58:18 2014 chapui_s
-** Last update Mon Mar  3 15:04:21 2014 chapui_s
+** Last update Sat Mar  8 17:40:11 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -33,11 +33,11 @@ static char	*dup_it(char *str, char *str2)
   return (str2);
 }
 
-char	*my_strdup(char *str)
+char		*my_strdup(char *str)
 {
-  int	size;
-  char	*str2;
-  int	nb_two_points;
+  int		size;
+  char		*str2;
+  int		nb_two_points;
 
   size = 0;
   nb_two_points = 0;

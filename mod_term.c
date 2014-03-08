@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Feb  6 12:50:26 2014 chapui_s
-** Last update Fri Mar  7 21:35:51 2014 chapui_s
+** Last update Sat Mar  8 17:22:31 2014 chapui_s
 */
 
 #include <curses.h>
@@ -13,11 +13,11 @@
 #include <stdlib.h>
 #include "minish.h"
 
-int	init_term(char **env,
-		  struct termios *term_attr)
+int		init_term(char **env,
+			  struct termios *term_attr)
 {
-  char  term_buf[TERM_BUF_SIZE];
-  char  *term_name;
+  char		term_buf[TERM_BUF_SIZE];
+  char		*term_name;
 
   if ((term_name = get_term(env)) == NULL)
     return (puterror("error: could not determine your terminal\n"));
@@ -39,7 +39,7 @@ int	init_term(char **env,
   return (0);
 }
 
-int	restore_term_after_redi(struct termios *term_attr)
+int		restore_term_after_redi(struct termios *term_attr)
 {
   if (fd_tty != 1)
   {
@@ -51,7 +51,7 @@ int	restore_term_after_redi(struct termios *term_attr)
   return (0);
 }
 
-int	restore_term(struct termios *term_attr)
+int		restore_term(struct termios *term_attr)
 {
   if (fd_tty != 1)
   {

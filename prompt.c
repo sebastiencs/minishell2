@@ -5,15 +5,15 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:30:35 2014 chapui_s
-** Last update Sat Mar  8 00:35:00 2014 chapui_s
+** Last update Sat Mar  8 17:41:19 2014 chapui_s
 */
 
 #include <stdlib.h>
 #include "minish.h"
 
-void	prompt(void)
+void		prompt(void)
 {
-  char	*user;
+  char		*user;
 
   if (my_strlen(username) == 0)
   {

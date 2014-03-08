@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 20:18:53 2014 chapui_s
-** Last update Thu Mar  6 15:12:35 2014 chapui_s
+** Last update Sat Mar  8 17:42:55 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -87,6 +87,5 @@ char		**seperate_wordtab(char *str, char separator)
     i += 1;
   }
   str_tab[i] = NULL;
-  /* free(str); */
   return (str_tab);
 }

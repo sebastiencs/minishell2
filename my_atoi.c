@@ -5,14 +5,14 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 19:19:38 2014 chapui_s
-** Last update Thu Mar  6 19:19:43 2014 chapui_s
+** Last update Sat Mar  8 17:21:58 2014 chapui_s
 */
 
-int	my_atoi(char *str)
+int		my_atoi(char *str)
 {
-  int	i;
-  int	negativ;
-  int	number;
+  int		i;
+  int		negativ;
+  int		number;
 
   i = 0;
   negativ = 0;
