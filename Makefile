@@ -5,7 +5,7 @@
 ## Login   <chapui_s@epitech.eu>
 ## 
 ## Started on  Sun Feb  9 17:43:54 2014 chapui_s
-## Last update Sat Mar  8 19:03:52 2014 chapui_s
+## Last update Sat Mar  8 22:24:44 2014 chapui_s
 ##
 
 SRC	= main.c \
@@ -53,7 +53,7 @@ SRC	= main.c \
 
 NAME	= mysh
 
-CFLAGS	= -lncurses -ggdb
+CFLAGS	= -lncurses
 
 OBJ	= $(SRC:.c=.o)
 
