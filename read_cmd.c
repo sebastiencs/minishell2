@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:52:40 2014 chapui_s
-** Last update Sat Mar  8 19:51:50 2014 chapui_s
+** Last update Sat Mar  8 21:57:16 2014 chapui_s
 */
 
 #include <term.h>
@@ -56,7 +56,7 @@ static char	*read_cmd(char **env,
 			  t_historic **historic)
 {
   t_read	*list_read;
-  int		size_read;
+  int		s_read;
   int		curs_cur;
   char		buf[128];
   int		is_rm;
@@ -67,7 +67,7 @@ static char	*read_cmd(char **env,
   buf_zero(buf, 128);
   my_tputs(tgetstr("im", NULL));
   (is_prompt == 1) ? (prompt()) : (0);
-  while ((size_read = read(fd_tty, &buf, 10)) > 0 && buf[0] != '\n')
+  while ((s_read = read(fd_tty, &buf, 10)) > 0 && buf[0] != '\n')
   {
     if (gmd(buf, 4, 0, 0) == 1
 	|| (get_key(&list_read, &curs_cur, buf, &is_rm)) == -1)
@@ -77,8 +77,8 @@ static char	*read_cmd(char **env,
       list_read = move_in_historic(buf, historic, list_read, &curs_cur);
     buf_zero(buf, 128);
   }
-  if (size_read == -1)
-    return (puterror_null("error: could not read\n"));
+  if (s_read == -1 || s_read == 0)
+    return (puterror_null((s_read == 0) ? ("\n") : ("error: read\n")));
   return (list_to_str(list_read, is_prompt, historic));
 }
 

@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Fri Mar  7 19:39:21 2014 chapui_s
-** Last update Fri Mar  7 20:45:52 2014 chapui_s
+** Last update Sat Mar  8 21:51:04 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -49,7 +49,7 @@ int		prepare_pipe(int nb_cmd_pipe,
   while (i < nb_cmd_pipe - 1)
   {
     if ((pipe(fd)) == -1)
-      return (puterror("error: pipe\n"));
+      return (my_putstr("error: pipe\n"));
     list_out[i] = fd[1];
     list_in[i + 1] = fd[0];
     list_fd[j] = fd[0];

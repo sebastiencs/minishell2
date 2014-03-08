@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Fri Mar  7 18:47:06 2014 chapui_s
-** Last update Fri Mar  7 18:53:41 2014 chapui_s
+** Last update Sat Mar  8 21:48:32 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -68,7 +68,7 @@ int		disp_env(char **env, t_env *options, t_cmd *cmd)
   else if (pid > 0)
     wait(status);
   else if (pid == -1)
-    return (puterror("error: fork\n"));
+    return (my_putstr("error: fork\n"));
   free(list_pipe->cmd);
   free(list_pipe);
   return (0);

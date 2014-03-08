@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Sat Mar  8 20:44:05 2014 chapui_s
+** Last update Sat Mar  8 21:47:17 2014 chapui_s
 */
 
 #include <signal.h>
@@ -46,7 +46,7 @@ int		loop_exec_pipe(int nb_cmd_pipe,
       exec_it(l_pip, env, i);
     }
     else if (pid == -1)
-      return (puterror("error: fork\n"));
+      return (my_putstr("error: fork\n"));
     i += 1;
   }
   return (0);

@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Feb  6 12:50:26 2014 chapui_s
-** Last update Sat Mar  8 17:22:31 2014 chapui_s
+** Last update Sat Mar  8 22:03:45 2014 chapui_s
 */
 
 #include <curses.h>
@@ -28,6 +28,7 @@ int		init_term(char **env,
     puterror("\" is not specified\n");
     return (-1);
   }
+  write(fd_tty, "OK\n", 3);
   if (tcgetattr(fd_tty, term_attr) < 0)
     return (puterror("error: could not get term values\n"));
   term_attr->c_lflag &= ~ICANON;
