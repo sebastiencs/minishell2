@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:52:40 2014 chapui_s
-** Last update Sat Mar  8 16:45:13 2014 chapui_s
+** Last update Sat Mar  8 19:51:50 2014 chapui_s
 */
 
 #include <term.h>
@@ -32,7 +32,7 @@ static int	get_key(t_read **list_read,
 {
   if ((get_char(list_read, buf, curs_cur, is_rm)) == -1)
     return (-1);
-  ((gmd(buf, 27, 91, 68))) ? (go_left(curs_cur, is_rm)) : (0);
+  ((gmd(buf, 27, 91, 68))) ? (go_left(curs_cur, is_rm, list_read)) : (0);
   ((gmd(buf, 27, 91, 67))) ? (go_right(list_read, curs_cur, is_rm)) : (0);
   ((gmd(buf, 127, 0, 0))) ? (rm_left(list_read, curs_cur)) : (0);
   ((gmd(buf, 27, 91, 51))) ? (rm_cur(list_read, buf, curs_cur)) : (0);

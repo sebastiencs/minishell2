@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 15:35:54 2014 chapui_s
-** Last update Sat Mar  8 17:35:06 2014 chapui_s
+** Last update Sat Mar  8 20:06:08 2014 chapui_s
 */
 
 #include <term.h>
@@ -21,23 +21,28 @@ int		get_char(t_read **list_read,
   if (buf[1] == 0 && buf[0] >= 32 && buf[0] <= 126 && buf[0] != '\t')
   {
     (*curs_cur) += 1;
-    if ((*is_rm)++ == -1)
-    curs_cur = 0;
+    if ((*is_rm) == -1)
+      *curs_cur = 0;
     if ((push_read(list_read, buf[0], *curs_cur)) == -1)
       return (-1);
+    if ((*is_rm)++ == -1)
+      *curs_cur = 1;
     write(fd_tty, &(buf[0]), 1);
     return (0);
   }
   return (1);
 }
 
-int		go_left(int *curs_cur, int *is_rm)
+int		go_left(int *curs_cur, int *is_rm, t_read **list_read)
 {
-  if ((*curs_cur) > 0)
-    my_tputs(tgetstr("le", NULL));
-  ((*curs_cur) - 1 >= 0) ? ((*curs_cur) -= 1) : (0);
-  if ((*curs_cur) == 0)
-    (*is_rm) = -1;
+  if (*list_read)
+  {
+    if ((*curs_cur) > 0)
+      my_tputs(tgetstr("le", NULL));
+    ((*curs_cur) - 1 >= 0) ? ((*curs_cur) -= 1) : (0);
+    if ((*curs_cur) == 0)
+      (*is_rm) = -1;
+  }
   return (0);
 }
 
