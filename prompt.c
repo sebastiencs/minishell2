@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:30:35 2014 chapui_s
-** Last update Sat Mar  8 17:41:19 2014 chapui_s
+** Last update Sun Mar  9 12:45:42 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -13,8 +13,6 @@
 
 void		prompt(void)
 {
-  char		*user;
-
   if (my_strlen(username) == 0)
   {
     my_putstr("$> ");

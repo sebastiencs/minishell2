@@ -5,13 +5,16 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Mar  5 18:49:51 2014 chapui_s
-** Last update Sat Mar  8 17:29:53 2014 chapui_s
+** Last update Sun Mar  9 12:40:58 2014 chapui_s
 */
 
 #include <stdlib.h>
+#include <term.h>
+#include "minish.h"
 
-void		clean_screen(char **env)
+void		clean_screen(char **env, t_read *list_read)
 {
   my_tputs(tgetstr("cl", NULL));
-  prompt(env);
+  prompt();
+  disp_list_read(list_read);
 }

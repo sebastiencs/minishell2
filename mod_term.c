@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Feb  6 12:50:26 2014 chapui_s
-** Last update Sat Mar  8 22:15:44 2014 chapui_s
+** Last update Sun Mar  9 11:15:15 2014 chapui_s
 */
 
 #include <curses.h>
@@ -39,18 +39,6 @@ int		init_term(char **env,
   return (0);
 }
 
-int		restore_term_after_redi(struct termios *term_attr)
-{
-  if (fd_tty != 1)
-  {
-    term_attr->c_lflag &= ~ICANON;
-    term_attr->c_lflag &= ~ECHO;
-    if ((tcsetattr(fd_tty, TCSANOW, term_attr)) < 0)
-      return (puterror("error: could not set term values\n"));
-  }
-  return (0);
-}
-
 int		restore_term(struct termios *term_attr)
 {
   if (fd_tty != 1)
@@ -58,6 +46,18 @@ int		restore_term(struct termios *term_attr)
     term_attr->c_lflag |= ICANON;
     term_attr->c_lflag |= ECHO;
     if ((tcsetattr(fd_tty, TCSANOW, term_attr)) == -1)
+      return (puterror("error: could not set term values\n"));
+  }
+  return (0);
+}
+
+int		restore_after_fork(void)
+{
+  if (fd_tty != 1)
+  {
+    term_attr.c_lflag &= ~ICANON;
+    term_attr.c_lflag &= ~ECHO;
+    if ((tcsetattr(fd_tty, TCSANOW, &term_attr)) == -1)
       return (puterror("error: could not set term values\n"));
   }
   return (0);

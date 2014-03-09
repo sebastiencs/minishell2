@@ -5,7 +5,7 @@
 ** Login   <sebastien@epitech.net>
 **
 ** Started on  Sat Dec 21 13:18:59 2013 Sebastien Chapuis
-** Last update Fri Mar  7 19:07:15 2014 chapui_s
+** Last update Sun Mar  9 12:56:14 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -33,11 +33,8 @@ int		exec_with_env(t_cmd *cmd,
 {
   t_cmd		*new_cmd;
   t_pipe	*list_pipe;
-  char		*str;
-  int		i;
   int		status;
 
-  i = 0;
   if (cmd->args[j] == NULL)
     return (0);
   if ((new_cmd = (t_cmd*)malloc(sizeof(*new_cmd))) == NULL)

@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:42:54 2014 chapui_s
-** Last update Sat Mar  8 20:15:54 2014 chapui_s
+** Last update Sun Mar  9 12:54:47 2014 chapui_s
 */
 
 #ifndef MINISH_H_
@@ -62,6 +62,7 @@ typedef struct		s_historic
 
 int		fd_tty;
 char		*username;
+struct termios	term_attr;
 void		*puterror_null(char *str);
 int		puterror(char *str);
 int		my_putstr(char *str);
@@ -106,10 +107,9 @@ int		do_redirections(t_pipe *list_pipe,
 				int is_redi);
 char		*realloc_it(char *dest, char *src);
 char		*get_next_line(const int fd);
-int		restore_term_after_redi(struct termios *term_attr);
 int		is_good_string_redi(char *str, char *good_string);
 char		*rm_good_string(char *str);
-void		clean_screen(char **env);
+void		clean_screen(char **env, t_read *list_read);
 int		is_builtin(char *str);
 char		*make_path_builtin(char *str);
 int		do_builtin(t_cmd *cmd,
@@ -150,5 +150,25 @@ t_read		*move_in_historic(char *buf,
 int		check_str_redi(char *str);
 void		close_pipe(t_pipe *list_pipe, int nb_cmd_pipe);
 t_read		*create_read(char c);
+int		restore_after_fork(void);
+int		gmd(char *buf, int n1, int n2, int n3);
+int		my_setenv(char ***env, char *variable, char *value);
+int		find_all_cmd(char **str_pipe, t_pipe *list_pipe);
+void		free_list_str_pipe(t_pipe *list_pipe, char **str_pipe);
+void		free_str_tab(char **str_tab);
+int		my_env(char **env, t_cmd *cmd, int fd_out);
+int		prepare_setenv(char ***env, char *str);
+int		exec_with_env(t_cmd *cmd,
+			      char **env,
+			      int j,
+			      int null);
+int		loop_exec_pipe(int nb_cmd_pipe,
+			       t_pipe *l_pip,
+			       char **env,
+			       int is_redi);
+void		wait_proc(int nb_cmd_pipe,
+			  int *status,
+			  int *list_fd,
+			  t_pipe *list_pipe);
 
 #endif /* !MINISH_H_ */

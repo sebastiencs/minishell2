@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 18:14:44 2014 chapui_s
-** Last update Sat Mar  8 20:16:13 2014 chapui_s
+** Last update Sun Mar  9 12:45:29 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -56,7 +56,7 @@ int		rm_in_list(t_read **list, int nb)
   i = 0;
   tmp = *list;
   if (tmp == NULL)
-    return ;
+    return (0);
   if (nb == 0)
     return (rm_begin(list));
   while (i++ < nb && tmp)

@@ -5,9 +5,11 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Sat Mar  8 21:47:17 2014 chapui_s
+** Last update Sun Mar  9 12:46:16 2014 chapui_s
 */
 
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -15,6 +17,7 @@
 
 static void	exec_it(t_pipe *l_pip, char **env, int i)
 {
+  restore_term(&term_attr);
   if ((execve(l_pip->cmd[i]->cmd_path, l_pip->cmd[i]->args, env)) == -1)
   {
     puterror("error: execve\n");
@@ -72,13 +75,12 @@ void		wait_proc(int nb_cmd_pipe,
 	puterror("Segfault !\n");
       else if (WTERMSIG(status[i]) == 8)
 	puterror("Arithmetic error !\n");
-      else
-	puterror("Killed\n");
     }
     else if (WIFSTOPPED(status[i]))
       puterror("Stopped\n");
     i += 1;
   }
+  restore_after_fork();
 }
 
 static int	exec_tab(char *str,

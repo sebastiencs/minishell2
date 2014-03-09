@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Wed Feb 26 17:52:40 2014 chapui_s
-** Last update Sat Mar  8 21:57:16 2014 chapui_s
+** Last update Sun Mar  9 12:38:54 2014 chapui_s
 */
 
 #include <term.h>
@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include "minish.h"
 
-static int	gmd(char *buf, int n1, int n2, int n3)
+int		gmd(char *buf, int n1, int n2, int n3)
 {
   if (buf[0] == 4 && buf[1] == 0 && buf[2] == 0)
   {
@@ -72,8 +72,8 @@ static char	*read_cmd(char **env,
     if (gmd(buf, 4, 0, 0) == 1
 	|| (get_key(&list_read, &curs_cur, buf, &is_rm)) == -1)
       return (NULL);
-    ((gmd(buf, 12, 0, 0))) ? (clean_screen(env)) : (0);
-    if (gmd(buf, 27, 91, 65) == 1 || gmd(buf, 27, 91, 66) == 1)
+    ((gmd(buf, 12, 0, 0))) ? (clean_screen(env, list_read)) : (0);
+    if (is_prompt == 1)
       list_read = move_in_historic(buf, historic, list_read, &curs_cur);
     buf_zero(buf, 128);
   }

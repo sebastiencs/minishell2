@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sun Feb  9 17:40:22 2014 chapui_s
-** Last update Sat Mar  8 22:15:29 2014 chapui_s
+** Last update Sun Mar  9 12:59:38 2014 chapui_s
 */
 
 #include <signal.h>
@@ -34,7 +34,12 @@ char		*get_username(char **env)
 
   i = 0;
   if ((tmp = search_in_env(env, "USER=")) == NULL)
-    return ("");
+  {
+    if ((username = (char*)malloc(1)) == NULL)
+      return (puterror_null("error: could not alloc\n"));
+    username[0] = 0;
+    return (username);
+  }
   if ((username = (char*)malloc(my_strlen(tmp) + 1)) == NULL)
     return (puterror_null("error: could not alloc\n"));
   while (tmp[i])
@@ -57,16 +62,17 @@ static char	**init_sh(char **env, struct termios *term_attr)
   }
   else
     fd_tty = 1;
-  if (env == NULL || env[0] == NULL)
+  if (env == NULL || env[0] == NULL || search_in_env(env, "PATH=") == NULL)
     env = begin_env(env);
   return (env);
 }
 
 int			main(int argc, char **argv, char **env)
 {
-  struct termios	term_attr;
   int			ret_exec;
 
+  (void)argc;
+  (void)argv;
   ret_exec = 0;
   if ((username = get_username(env)) == NULL)
     return (-1);

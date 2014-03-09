@@ -6,9 +6,10 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Tue Mar  4 22:47:48 2014 chapui_s
-** Last update Sat Mar  8 21:51:21 2014 chapui_s
+** Last update Sun Mar  9 12:49:33 2014 chapui_s
 */
 
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -52,8 +53,9 @@ static int	do_simple_left_redi(t_pipe *list_pipe, int i)
 static int	make_two_redi_left(t_pipe *list_pipe, int i, char *buffer)
 {
   int		*pipefd;
-  char		tmp[5];
 
+  if (list_pipe->list_in[i] != -1)
+    close(list_pipe->list_in[i]);
   if ((list_pipe->list_fd = (int*)malloc(sizeof(int) * 2)) == NULL)
     return (puterror("error: malloc\n"));
   pipefd = list_pipe->list_fd;
@@ -72,6 +74,7 @@ static int	do_redi_left(t_pipe *list_pipe, int i, char **env)
   char		*buffer;
   char		*tmp;
 
+  restore_after_fork();
   if (list_pipe->cmd[i]->is_redi_left == 1)
     return (do_simple_left_redi(list_pipe, i));
   j = 0;
@@ -113,5 +116,6 @@ int		do_redirections(t_pipe *list_pipe,
       if ((dup2(list_pipe->list_out[i], 1)) == -1)
         return (puterror("error: dup2\n"));
   }
+  restore_term(&term_attr);
   return (ret);
 }

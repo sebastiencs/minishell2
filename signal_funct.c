@@ -5,13 +5,14 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sat Mar  8 00:36:56 2014 chapui_s
-** Last update Sat Mar  8 17:33:52 2014 chapui_s
+** Last update Sun Mar  9 13:00:09 2014 chapui_s
 */
 
 #include "minish.h"
 
 void		get_sigint(int sig)
 {
+  (void)sig;
   my_putstr("\n");
   prompt();
 }

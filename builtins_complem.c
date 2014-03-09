@@ -5,10 +5,11 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 19:09:45 2014 chapui_s
-** Last update Fri Mar  7 19:28:31 2014 chapui_s
+** Last update Sun Mar  9 12:53:18 2014 chapui_s
 */
 
 #include <stdlib.h>
+#include "minish.h"
 
 char		*left_egale(char *str)
 {

@@ -5,9 +5,10 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sat Mar  8 18:56:40 2014 chapui_s
-** Last update Sat Mar  8 18:59:04 2014 chapui_s
+** Last update Sun Mar  9 12:57:38 2014 chapui_s
 */
 
+#include <unistd.h>
 #include "minish.h"
 
 void		close_pipe(t_pipe *list_pipe, int nb_cmd_pipe)

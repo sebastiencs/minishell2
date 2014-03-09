@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Sat Mar  8 11:19:34 2014 chapui_s
-** Last update Sat Mar  8 17:23:45 2014 chapui_s
+** Last update Sun Mar  9 12:54:02 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -80,10 +80,8 @@ int			push_historic(t_historic **historic,
 				      t_read *list_read)
 {
   t_historic		*tmp;
-  unsigned int		size;
 
   tmp = *historic;
-  size = 0;
   if (tmp)
   {
     if (my_strcmp(list_to_str(list_read, 0, historic),

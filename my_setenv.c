@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Thu Mar  6 16:00:49 2014 chapui_s
-** Last update Sat Mar  8 16:26:31 2014 chapui_s
+** Last update Sun Mar  9 12:55:37 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -32,6 +32,7 @@ static int	mod_env(char **str, char *value)
     new_str[j + i] = value[i++];
   new_str[j + i] = 0;
   *str = new_str;
+  return (0);
 }
 
 static char	**cp_env(char **env)

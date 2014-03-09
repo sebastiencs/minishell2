@@ -5,10 +5,13 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Fri Mar  7 18:47:06 2014 chapui_s
-** Last update Sat Mar  8 21:48:32 2014 chapui_s
+** Last update Sun Mar  9 12:58:43 2014 chapui_s
 */
 
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "minish.h"
 
 void		putstr_fd(char *str, int fd)
@@ -52,12 +55,10 @@ void		disp_env_son(t_pipe *list_pipe,
 int		disp_env(char **env, t_env *options, t_cmd *cmd)
 {
   t_pipe	*list_pipe;
-  int		fd_to_close;
   int		pid;
   int		status;
-  int		i;
 
-  i = 0;
+  status = 0;
   if ((list_pipe = (t_pipe*)malloc(sizeof(*list_pipe))) == NULL
       || (list_pipe->cmd = (t_cmd**)malloc(sizeof(t_cmd*) * 2)) == NULL)
     return (puterror("error : could not alloc\n"));
@@ -66,7 +67,7 @@ int		disp_env(char **env, t_env *options, t_cmd *cmd)
   if ((pid = fork()) == 0)
     disp_env_son(list_pipe, options, env, cmd);
   else if (pid > 0)
-    wait(status);
+    wait(&status);
   else if (pid == -1)
     return (my_putstr("error: fork\n"));
   free(list_pipe->cmd);

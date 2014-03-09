@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Mon Mar  3 14:57:11 2014 chapui_s
-** Last update Thu Mar  6 15:52:21 2014 chapui_s
+** Last update Sun Mar  9 12:48:05 2014 chapui_s
 */
 
 #include <sys/types.h>
@@ -87,8 +87,6 @@ char		*find_it(char *str, char **environ, int i, char *tmp)
 
 char		*find_cmd(char *str, char **environ, int i, char *tmp)
 {
-  char		**paths;
-
   if (is_builtin(str) == 1)
     return (make_path_builtin(str));
   else if (str && str[0] != '.' && str[0] != '/' && environ)

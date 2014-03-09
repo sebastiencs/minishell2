@@ -5,7 +5,7 @@
 ** Login   <chapui_s@epitech.eu>
 **
 ** Started on  Tue Mar  4 22:48:02 2014 chapui_s
-** Last update Tue Mar  4 22:48:02 2014 chapui_s
+** Last update Sun Mar  9 12:48:34 2014 chapui_s
 */
 
 #include <stdlib.h>
@@ -42,6 +42,7 @@ int		get_right_redirection(char *str, t_cmd *cmd)
     i += 1;
   if ((cmd->redi_right = get_redi_file(str + i)) == NULL)
     return (-1);
+  return (0);
 }
 
 int		get_left_redirection(char *str, t_cmd *cmd)
@@ -55,6 +56,7 @@ int		get_left_redirection(char *str, t_cmd *cmd)
     i += 1;
   if ((cmd->redi_left = get_redi_file(str + i)) == NULL)
     return (-1);
+  return (0);
 }
 
 static void	rm_redi_file(char *str)
